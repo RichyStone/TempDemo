@@ -120,15 +120,20 @@
 
         #region 读写锁
 
-
         private static readonly ReaderWriterLockSlim readWriteLock = new ReaderWriterLockSlim();
 
         private const string filePath = "D://Log//Test.txt";
+
+        private static int executeTimes = 0;
+
+        private static int excuteIndex = 0;
 
         public static void TestReaderWriterLock()
         {
             var ret = OpenOrCreatFile(filePath);
             if (!ret) return;
+
+            Repeat:
 
             Thread writeThread1 = new Thread(() => Write(filePath)) { IsBackground = true };
             writeThread1.Start();
@@ -153,6 +158,11 @@
 
             Thread writeThread3 = new Thread(() => Write(filePath)) { IsBackground = true };
             writeThread3.Start();
+
+            executeTimes++;
+
+            if (executeTimes < 2)
+                goto Repeat;
         }
 
         private static bool OpenOrCreatFile(string filePath)
@@ -202,8 +212,6 @@
             }
         }
 
-        private static int ind = 0;
-
         private static void Read(string filePath, int index)
         {
             try
@@ -216,7 +224,7 @@
                 if (str.Count() > 0)
                 {
                     var text = str.Count() > index ? str[index] : str.Last();
-                    var ii = Interlocked.Increment(ref ind);
+                    var ii = Interlocked.Increment(ref excuteIndex);
                     var id = Thread.CurrentThread.ManagedThreadId;
                     Console.WriteLine($"{text}_Index:{ii}_CurrentThreadID:{id}");
                 }
