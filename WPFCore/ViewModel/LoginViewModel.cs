@@ -17,10 +17,14 @@ namespace WpfCore.ViewModel
         }
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(TestNotify))]
         private string? userName;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(LoginFuncCommand))]
         private string? password;
+
+        public string? TestNotify { get; set; }
 
         partial void OnUserNameChanged(string? oldValue, string? newValue)
         {
