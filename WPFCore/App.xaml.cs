@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
+using WpfCore.ViewModel;
+
 namespace WpfCore
 {
     /// <summary>
@@ -20,13 +22,6 @@ namespace WpfCore
         {
             InitializeComponent();
             UIDispatcher = Application.Current.Dispatcher;
-        }
-
-        private static IServiceProvider ConfigureServices()
-        {
-            var services = new ServiceCollection();
-
-            return services.BuildServiceProvider();
         }
 
     }
