@@ -2,10 +2,6 @@
 {
     public class AsyncTest
     {
-        /// <summary>
-        /// Git测试
-        /// </summary>
-
         #region 调用
 
         private WaitHandle waitHandle = new ManualResetEvent(false);
