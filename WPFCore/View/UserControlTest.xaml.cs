@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace WpfCore.View
 {
     /// <summary>
-    /// UcLogin.xaml 的交互逻辑
+    /// UserControlTest.xaml 的交互逻辑
     /// </summary>
-    public partial class UcLogin : UserControl
+    public partial class UserControlTest : UserControl
     {
-        public UcLogin()
+        public UserControlTest()
         {
             InitializeComponent();
         }
