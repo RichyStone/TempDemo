@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommonTools.Log;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
@@ -49,8 +50,11 @@ namespace WpfCore.ViewModel
             if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Password))
             {
                 MessageBox.Show("用户名或密码为空！", "登录", MessageBoxButton.OK, MessageBoxImage.Error);
+                LogHelper.LogError("登录失败");
                 return;
             }
+
+            LogHelper.LogInfo("登录成功");
 
         }
 
