@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace WpfCore.ViewModel
+namespace WpfNet6.ViewModel
 {
     public class MainViewModel
     {

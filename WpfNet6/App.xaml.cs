@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using WpfCore.ViewModel;
+using WpfNet6.ViewModel;
 
-namespace WpfCore
+namespace WpfNet6
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace WpfCore.Convert
+namespace WpfNet6.Convert
 {
     public class Int2stringConverter : IValueConverter
     {
