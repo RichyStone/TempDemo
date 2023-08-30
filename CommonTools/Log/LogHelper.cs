@@ -50,7 +50,6 @@ namespace CommonTools.Log
         {
             LogInit();
 
-            Console.WriteLine(info);
             if (loginfo.IsInfoEnabled)
             {
                 loginfo.Info(info);
@@ -61,7 +60,6 @@ namespace CommonTools.Log
         {
             LogInit();
 
-            Console.WriteLine(info);
             if (loginfo.IsDebugEnabled)
             {
                 loginfo.Debug(info);
@@ -72,7 +70,6 @@ namespace CommonTools.Log
         {
             LogInit();
 
-            Console.WriteLine(error);
             if (logerror.IsErrorEnabled)
             {
                 logerror.Error(error);

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using WpfNet6.CommonInfo;
 
 namespace WpfNet6.ViewModel
 {
@@ -55,9 +56,71 @@ namespace WpfNet6.ViewModel
             }
 
             LogHelper.LogInfo("登录成功");
-
+            TestSerializer();
         }
 
+        private void TestSerializer()
+        {
+            var list = new List<SerializableInfo>() {
+            new SerializableInfo()
+            {
+                Name = "TestInfo",
+                Description = "测试信息",
+                IP = "127.0.0.1",
+                Address = "1234567",
+                City = "whereEver",
+                Port = 8888,
+                PostalCode = "12345",
+                Region = "bbb"
+            },
+            new SerializableInfo()
+            {
+                Name = "TestInfo",
+                Description = "测试信息",
+                IP = "127.0.0.1",
+                Address = "1234567",
+                City = "whereEver",
+                Port = 8888,
+                PostalCode = "12345",
+                Region = "ccc"
+            },
+            new SerializableInfo()
+            {
+                Name = "TestInfo",
+                Description = "测试信息",
+                IP = "127.0.0.1",
+                Address = "1234567",
+                City = "whereEver",
+                Port = 8888,
+                PostalCode = "12345",
+                Region = "ddd"
+            },
+            new SerializableInfo()
+            {
+                Name = "TestInfo",
+                Description = "测试信息",
+                IP = "127.0.0.1",
+                Address = "1234567",
+                City = "whereEver",
+                Port = 8888,
+                PostalCode = "12345",
+                Region = "aaa"
+            },
+            };
+
+            var str = CommonTools.Serialize.XmlSerializeHelper.WriteFile(list, $"{Environment.CurrentDirectory}\\Test\\tempFile");
+            if (string.IsNullOrEmpty(str))
+                MessageBox.Show("写入成功！");
+            else
+                MessageBox.Show($"写入失败：{str}");
+
+            var getinfo = CommonTools.Serialize.XmlSerializeHelper.ReadFile<List<SerializableInfo>>($"{Environment.CurrentDirectory}\\Test\\tempFile", ".xml", out string errormsg);
+            if (string.IsNullOrEmpty(errormsg))
+                MessageBox.Show("读取成功！");
+            else
+                MessageBox.Show($"读取失败：{errormsg}");
+
+        }
 
     }
 }
