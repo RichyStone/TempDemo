@@ -18,4 +18,8 @@
     <ProjectReference Include="..\CommonTools\CommonTools.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="GlobalFunction\" />
+  </ItemGroup>
+
 </Project>
