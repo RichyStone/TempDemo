@@ -175,8 +175,9 @@
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
 
+                ////创建后必须关闭流，保证文件不被占用
                 if (!File.Exists(filePath))
-                    File.Create(filePath);
+                    File.Create(filePath).Close();
 
                 return true;
             }
