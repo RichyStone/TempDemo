@@ -17,9 +17,9 @@ namespace WaveMeter_GUI.GlobalManager
 
         private static ConcurrentDictionary<ViewType, ContentControl> viewDic = new ConcurrentDictionary<ViewType, ContentControl>();
 
-        public static bool GetView(ViewType viewType, out ContentControl control)
+        public static ContentControl GetView(ViewType viewType)
         {
-            control = null;
+            ContentControl control = null;
             try
             {
                 var intptr = FindWindow(null, viewType.ToString());
@@ -32,11 +32,11 @@ namespace WaveMeter_GUI.GlobalManager
                         viewDic.TryAdd(viewType, control);
                 }
 
-                return control != null;
+                return control;
             }
             catch (Exception ex)
             {
-                return control != null;
+                return control;
             }
         }
 
