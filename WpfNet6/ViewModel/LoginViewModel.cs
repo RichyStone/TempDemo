@@ -28,6 +28,9 @@ namespace WpfNet6.ViewModel
 
         public string? TestNotify { get; set; }
 
+        [ObservableProperty]
+        private double? num;
+
         partial void OnUserNameChanged(string? oldValue, string? newValue)
         {
             if (string.IsNullOrWhiteSpace(newValue))
@@ -56,7 +59,9 @@ namespace WpfNet6.ViewModel
             }
 
             LogHelper.LogInfo("登录成功");
-            TestSerializer();
+
+            Num = 16.4E-1;
+            ////TestSerializer();
         }
 
         private void TestSerializer()
