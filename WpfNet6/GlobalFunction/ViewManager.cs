@@ -1,10 +1,12 @@
-﻿using System;
+﻿using CommonTools.Log;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using WpfNet6.View;
 
@@ -12,44 +14,126 @@ namespace WaveMeter_GUI.GlobalManager
 {
     public static class ViewManager
     {
-        [DllImport("user32.dll")]
-        private static extern IntPtr FindWindow(string className, string windowName);
 
-        private static ConcurrentDictionary<ViewType, ContentControl> viewDic = new ConcurrentDictionary<ViewType, ContentControl>();
+        /// <summary>
+        /// 窗口字典
+        /// </summary>
+        private static readonly ConcurrentDictionary<WindowType, Window> windowDic = new();
 
-        public static ContentControl GetView(ViewType viewType)
+        /// <summary>
+        /// 控件字典
+        /// </summary>
+        private static readonly ConcurrentDictionary<ControlType, ContentControl> controlDic = new();
+
+        /// <summary>
+        /// 显示窗口
+        /// </summary>
+        /// <param name="viewType"></param>
+        /// <param name="showDialog"></param>
+        public static void ShowWindow(WindowType viewType, bool showDialog = false)
         {
-            ContentControl control = null;
+            var win = GetWindow(viewType);
+            if (win is Window window)
+            {
+                if (showDialog)
+                    window.ShowDialog();
+                else
+                    window.Show();
+            }
+        }
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr FindWindow(string? className, string windowName);
+
+        /// <summary>
+        /// 获取窗口
+        /// </summary>
+        /// <param name="viewType">控件类型</param>
+        /// <returns></returns>
+        private static Window? GetWindow(WindowType viewType)
+        {
+            Window? window = null;
             try
             {
                 var intptr = FindWindow(null, viewType.ToString());
-                if (intptr != IntPtr.Zero && viewDic.ContainsKey(viewType))
-                    control = viewDic[viewType];
+                if (intptr != IntPtr.Zero && windowDic.ContainsKey(viewType))
+                    window = windowDic[viewType];
                 else
                 {
-                    control = CreateView(viewType);
-                    if (viewDic.TryRemove(viewType, out _))
-                        viewDic.TryAdd(viewType, control);
+                    window = CreateWindow(viewType);
+                    if (window != null && windowDic.TryRemove(viewType, out _))
+                        windowDic.TryAdd(viewType, window);
+                }
+
+                return window;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.LogError(ex.Message, ex);
+                return window;
+            }
+        }
+
+        /// <summary>
+        /// 创建窗口
+        /// </summary>
+        /// <param name="viewType">空间类型</param>
+        /// <returns></returns>
+        private static Window? CreateWindow(WindowType viewType)
+        {
+            Window? window = null;
+            switch (viewType)
+            {
+                case WindowType.MainWindow:
+                    window = new MainWindow();
+                    break;
+
+                case WindowType.None:
+                    break;
+            }
+
+            return window;
+        }
+
+        /// <summary>
+        /// 获取UserControl
+        /// </summary>
+        /// <param name="controlType"></param>
+        /// <returns></returns>
+        public static ContentControl? GetUserControl(ControlType controlType)
+        {
+            ContentControl? control = null;
+            try
+            {
+                if (controlDic.ContainsKey(controlType))
+                    control = controlDic[controlType];
+                else
+                {
+                    control = CreateControl(controlType);
+                    if (control != null && controlDic.TryRemove(controlType, out _))
+                        controlDic.TryAdd(controlType, control);
                 }
 
                 return control;
             }
             catch (Exception ex)
             {
+                LogHelper.LogError(ex.Message, ex);
                 return control;
             }
         }
 
-        private static ContentControl CreateView(ViewType viewType)
+        /// <summary>
+        /// 创建控件
+        /// </summary>
+        /// <param name="controlType"></param>
+        /// <returns></returns>
+        private static ContentControl? CreateControl(ControlType controlType)
         {
-            ContentControl control = null;
-            switch (viewType)
+            ContentControl? control = null;
+            switch (controlType)
             {
-                case ViewType.MainWindow:
-                    control = new MainWindow();
-                    break;
-
-                case ViewType.None:
+                case ControlType.None:
                     break;
             }
 
@@ -58,10 +142,19 @@ namespace WaveMeter_GUI.GlobalManager
 
     }
 
-}
+    /// <summary>
+    /// 控件类型
+    /// </summary>
+    public enum WindowType
+    {
+        None,
+        MainWindow
+    }
 
-public enum ViewType
-{
-    None,
-    MainWindow
+    public enum ControlType
+    {
+        None,
+
+    }
+
 }
