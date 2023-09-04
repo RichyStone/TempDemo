@@ -35,10 +35,26 @@ namespace WaveMeter_GUI.GlobalManager
             var win = GetWindow(viewType);
             if (win is Window window)
             {
+                if (!window.IsActive)
+                    window.Activate();
+
                 if (showDialog)
                     window.ShowDialog();
                 else
                     window.Show();
+            }
+        }
+
+        /// <summary>
+        /// 隐藏窗口
+        /// </summary>
+        /// <param name="viewType"></param>
+        public static void HideWindow(WindowType viewType)
+        {
+            var win = GetWindow(viewType);
+            if (win is Window window)
+            {
+                window.Hide();
             }
         }
 
@@ -56,13 +72,15 @@ namespace WaveMeter_GUI.GlobalManager
             try
             {
                 var intptr = FindWindow(null, viewType.ToString());
-                if (intptr != IntPtr.Zero && windowDic.ContainsKey(viewType))
-                    window = windowDic[viewType];
-                else
+                if (!windowDic.ContainsKey(viewType) || intptr == IntPtr.Zero)
                 {
                     window = CreateWindow(viewType);
                     if (window != null && windowDic.TryRemove(viewType, out _))
                         windowDic.TryAdd(viewType, window);
+                }
+                else
+                {
+                    window = windowDic[viewType];
                 }
 
                 return window;
