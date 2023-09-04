@@ -10,17 +10,31 @@ namespace CommonTools.Log
 {
     public static class LogHelper
     {
+        /// <summary>
+        /// 信息Logger
+        /// </summary>
         private static readonly log4net.ILog loginfo = log4net.LogManager.GetLogger("loginfo");
+        
+        /// <summary>
+        /// 错误Logger
+        /// </summary>
         private static readonly log4net.ILog logerror = log4net.LogManager.GetLogger("logerror");
 
+        /// <summary>
+        /// 初始化标志位
+        /// </summary>
         private static bool initFlag = false;
 
+        /// <summary>
+        /// 初始化锁
+        /// </summary>
         private static readonly object initLock = new object();
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
         private static void LogInit()
         {
-            if (initFlag) return;
-
             lock (initLock)
             {
                 if (!initFlag)
@@ -28,6 +42,10 @@ namespace CommonTools.Log
             }
         }
 
+        /// <summary>
+        /// 加载配置文件
+        /// </summary>
+        /// <returns></returns>
         private static bool LoadLogConfig()
         {
             try
@@ -46,9 +64,14 @@ namespace CommonTools.Log
             }
         }
 
+        /// <summary>
+        /// 普通信息
+        /// </summary>
+        /// <param name="info"></param>
         public static void LogInfo(string info)
         {
-            LogInit();
+            if (!initFlag)
+                LogInit();
 
             if (loginfo.IsInfoEnabled)
             {
@@ -56,9 +79,14 @@ namespace CommonTools.Log
             }
         }
 
+        /// <summary>
+        /// 调试信息
+        /// </summary>
+        /// <param name="info"></param>
         public static void LogDebug(string info)
         {
-            LogInit();
+            if (!initFlag)
+                LogInit();
 
             if (loginfo.IsDebugEnabled)
             {
@@ -66,9 +94,14 @@ namespace CommonTools.Log
             }
         }
 
+        /// <summary>
+        /// 错误信息
+        /// </summary>
+        /// <param name="error"></param>
         public static void LogError(string error)
         {
-            LogInit();
+            if (!initFlag)
+                LogInit();
 
             if (logerror.IsErrorEnabled)
             {
@@ -76,9 +109,15 @@ namespace CommonTools.Log
             }
         }
 
+        /// <summary>
+        /// 错误信息
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="ex"></param>
         public static void LogError(string info, Exception ex)
         {
-            LogInit();
+            if (!initFlag)
+                LogInit();
 
             Console.WriteLine(info);
             if (logerror.IsErrorEnabled)
