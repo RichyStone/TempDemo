@@ -33,8 +33,9 @@ namespace CommonTools.Serialize
                 var path = Path.ChangeExtension(filePath, extension);
                 XmlSerializer serializer = new XmlSerializer(obj.GetType());
 
-                using Stream stream = new FileStream(path, FileMode.OpenOrCreate);
-                serializer.Serialize(stream, obj);
+                using (Stream stream = new FileStream(path, FileMode.OpenOrCreate))
+                    serializer.Serialize(stream, obj);
+
                 return string.Empty;
             }
             catch (Exception ex)
@@ -51,10 +52,10 @@ namespace CommonTools.Serialize
         /// <param name="extension">文件后缀名</param>
         /// <param name="errorMsg">错误信息</param>
         /// <returns>反序列化得到的对象</returns>
-        public static TObject? ReadFile<TObject>(string filePath, string extension, out string errorMsg)
+        public static TObject ReadFile<TObject>(string filePath, string extension, out string errorMsg)
             where TObject : class
         {
-            TObject? t = null;
+            TObject t = null;
             errorMsg = string.Empty;
 
             try
@@ -65,9 +66,11 @@ namespace CommonTools.Serialize
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(TObject));
 
-                    using Stream stream = new FileStream(path, FileMode.Open);
-                    var obj = serializer.Deserialize(stream);
-                    t = obj as TObject;
+                    using (Stream stream = new FileStream(path, FileMode.Open))
+                    {
+                        var obj = serializer.Deserialize(stream);
+                        t = obj as TObject;
+                    }
                 }
                 else
                     errorMsg = "文件路径不存在";
