@@ -161,7 +161,7 @@ namespace WaveMeter_GUI.GlobalManager
     }
 
     /// <summary>
-    /// 控件类型
+    /// 窗口类型
     /// </summary>
     public enum WindowType
     {
@@ -169,6 +169,9 @@ namespace WaveMeter_GUI.GlobalManager
         MainWindow
     }
 
+    /// <summary>
+    /// 控件类型
+    /// </summary>
     public enum ControlType
     {
         None,
