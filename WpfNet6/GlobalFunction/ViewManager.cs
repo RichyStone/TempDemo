@@ -14,6 +14,8 @@ namespace WaveMeter_GUI.GlobalManager
 {
     public static class ViewManager
     {
+        [DllImport("user32.dll")]
+        private static extern IntPtr FindWindow(string? className, string windowName);
 
         /// <summary>
         /// 窗口字典
@@ -58,8 +60,30 @@ namespace WaveMeter_GUI.GlobalManager
             }
         }
 
-        [DllImport("user32.dll")]
-        private static extern IntPtr FindWindow(string? className, string windowName);
+        /// <summary>
+        /// 关闭窗口
+        /// </summary>
+        /// <param name="viewType"></param>
+        public static void CloseWindow(WindowType viewType)
+        {
+            var win = GetWindow(viewType);
+            if (win is Window window)
+            {
+                window.Close();
+                windowDic.TryRemove(viewType, out _);
+            }
+        }
+
+        /// <summary>
+        /// 判断界面是否存在
+        /// </summary>
+        /// <param name="viewType"></param>
+        /// <returns></returns>
+        public static bool CheckWindowExist(WindowType viewType)
+        {
+            var intptr = FindWindow(null, viewType.ToString());
+            return intptr != IntPtr.Zero;
+        }
 
         /// <summary>
         /// 获取窗口
