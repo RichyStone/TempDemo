@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommonTools.Log;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -21,7 +22,19 @@ namespace WpfNet6
         {
             InitializeComponent();
             UIDispatcher = Application.Current.Dispatcher;
+            this.DispatcherUnhandledException += CatchUIUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CatchUnhandledException;
         }
 
+        private void CatchUIUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            LogHelper.LogError($"UI线程未处理异常：{e.Exception.Message}\n{e.Exception.StackTrace}");
+        }
+
+        private void CatchUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (e.ExceptionObject is Exception ex)
+                LogHelper.LogError($"非UI线程未处理异常：{ex.Message}\n{ex.StackTrace}");
+        }
     }
 }
