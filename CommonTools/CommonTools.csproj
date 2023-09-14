@@ -5,6 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Log\LogConfigHtmVersion\log4net.config" />
+    <None Remove="Log\LogConfigTxtVersion\log4net.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Log\LogConfigHtmVersion\log4net.config">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Log\LogConfigTxtVersion\log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.15" />
   </ItemGroup>
 

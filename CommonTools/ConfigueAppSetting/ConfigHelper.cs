@@ -13,12 +13,12 @@ namespace CommonTools.ConfigueAppSetting
         /// </summary>
         /// <param name="key">键</param>
         /// <returns>值</returns>
-        public static string GetAppSetting(string key)
+        public static string GetAppSetting(string key, string defaultValue = "")
         {
             try
             {
                 var str = ConfigurationManager.AppSettings[key];
-                return str;
+                return string.IsNullOrEmpty(str) ? defaultValue : str;
             }
             catch
             {
