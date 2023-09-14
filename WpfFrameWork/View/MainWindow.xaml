@@ -9,5 +9,11 @@
     Width="800"
     Height="450"
     mc:Ignorable="d">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries />
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid />
 </Window>

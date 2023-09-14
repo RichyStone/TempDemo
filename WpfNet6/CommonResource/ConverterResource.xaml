@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary xmlns:convert="clr-namespace:WpfNet6.Converters">
+            <convert:ScreenSizeConverter x:Key="screenConverter" />
+            <convert:Int2stringConverter x:Key="int2strConverter" />
+        </ResourceDictionary>
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

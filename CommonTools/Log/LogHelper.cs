@@ -58,7 +58,7 @@ namespace CommonTools.Log
                 var collection = log4net.Config.XmlConfigurator.Configure(new FileInfo($"{path}"));
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

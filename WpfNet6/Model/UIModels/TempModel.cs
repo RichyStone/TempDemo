@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfNet6.Model
+namespace WpfNet6.Model.UIModels
 {
     public class TempModel : ObservableObject
     {

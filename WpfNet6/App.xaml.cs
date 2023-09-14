@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using WpfNet6.ViewModel;
 
 namespace WpfNet6
 {

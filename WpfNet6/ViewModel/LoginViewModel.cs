@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using WpfNet6.CommonInfo;
+using WpfNet6.Model.OtherModels;
 
 namespace WpfNet6.ViewModel
 {

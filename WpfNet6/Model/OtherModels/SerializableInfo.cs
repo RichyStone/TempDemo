@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace WpfNet6.CommonInfo
+namespace WpfNet6.Model.OtherModels
 {
     [Serializable]
     public class SerializableInfo
