@@ -7,8 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:WpfNet6.ViewModel"
     Title="MainWindow"
-    Width="800"
-    Height="800"
+    Width="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}}"
+    Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}}"
     mc:Ignorable="d">
     <Window.DataContext>
         <vm:MainViewModel />
@@ -35,7 +35,5 @@
             <TextBlock Text="Test" />
             <TextBlock Text="Test" />
         </UniformGrid>
-
-
     </Grid>
 </Window>
