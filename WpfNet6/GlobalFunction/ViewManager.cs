@@ -10,7 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using WpfNet6.View;
 
-namespace WaveMeter_GUI.GlobalManager
+namespace WpfNet6.GlobalManager
 {
     public static class ViewManager
     {
