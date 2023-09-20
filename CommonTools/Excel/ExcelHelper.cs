@@ -3,7 +3,6 @@ using NPOI.XSSF.UserModel;
 using System;
 using System.Data;
 using System.IO;
-using System.Windows.Forms;
 
 namespace CommonTools.Excel
 {
@@ -143,34 +142,34 @@ namespace CommonTools.Excel
         /// 获取让用户选择保存文件的绝对路径
         /// </summary>
         /// <returns></returns>
-        public static string GetSaveFileRoute(string fileName, string filter = "Excel(*.xlsx)|*.xlsx", string initialDir = "")
-        {
-            SaveFileDialog dialog = new SaveFileDialog();
-            try
-            {
-                dialog.Filter = filter;
-                dialog.InitialDirectory = string.IsNullOrWhiteSpace(initialDir) ? $"{Environment.CurrentDirectory}" : initialDir;
-                dialog.FileName = fileName;
-                var res = dialog.ShowDialog();
-                if (res == DialogResult.Yes || res == DialogResult.OK)
-                {
-                    if (dialog.OverwritePrompt)
-                        File.Delete(dialog.FileName);
+        //public static string GetSaveFileRoute(string fileName, string filter = "Excel(*.xlsx)|*.xlsx", string initialDir = "")
+        //{
+        //    SaveFileDialog dialog = new SaveFileDialog();
+        //    try
+        //    {
+        //        dialog.Filter = filter;
+        //        dialog.InitialDirectory = string.IsNullOrWhiteSpace(initialDir) ? $"{Environment.CurrentDirectory}" : initialDir;
+        //        dialog.FileName = fileName;
+        //        var res = dialog.ShowDialog();
+        //        if (res == DialogResult.Yes || res == DialogResult.OK)
+        //        {
+        //            if (dialog.OverwritePrompt)
+        //                File.Delete(dialog.FileName);
 
-                    return dialog.FileName;
-                }
+        //            return dialog.FileName;
+        //        }
 
-                return string.Empty;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                dialog.Dispose();
-            }
-        }
+        //        return string.Empty;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //    finally
+        //    {
+        //        dialog.Dispose();
+        //    }
+        //}
 
         #endregion
 

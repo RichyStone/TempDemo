@@ -19,16 +19,17 @@
             BorderThickness="1"
             CornerRadius="3">
 
-            <Grid Margin="5">
+            <Grid Margin="5" TextElement.FontSize="16">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25" />
                     <RowDefinition Height="25" />
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
                     <TextBlock FontSize="16" Text="用户名" />
-                    <TextBox Margin="5,2" Text="{Binding UserName}" />
+                    <TextBox Margin="5,2" Text="{Binding UserName, FallbackValue=invalid}" />
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
@@ -40,12 +41,23 @@
                     Grid.Row="2"
                     Margin="0,10"
                     Orientation="Horizontal">
+                    <CheckBox
+                        Width="50"
+                        Height="20"
+                        Content="Enabled"
+                        IsChecked="{Binding Enable}" />
                     <Button
                         Width="50"
                         Height="20"
+                        Margin="50,0"
                         Command="{Binding LoginFuncCommand}"
                         Content="登录" />
                     <TextBlock Text="{Binding Num}" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="3" Orientation="Horizontal">
+                    <CheckBox Content="IsRunning" IsChecked="{Binding LoginFuncCommand.IsRunning, Mode=OneWay}" />
+                    <TextBlock Margin="20,0" Text="{Binding TestNotify, Mode=OneWay}" />
                 </StackPanel>
             </Grid>
         </Border>
