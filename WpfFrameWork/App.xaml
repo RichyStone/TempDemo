@@ -4,6 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:WpfFrameWork="clr-namespace:WpfFrameWork.ViewModel"
     xmlns:local="clr-namespace:WpfFrameWork"
+    xmlns:vm="clr-namespace:WpfFrameWork.ViewModel"
     StartupUri="View/MainWindow.xaml">
-    <Application.Resources />
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <vm:ViewModelLocator x:Key="Locator" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

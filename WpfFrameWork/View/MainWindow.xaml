@@ -8,6 +8,7 @@
     Title="MainWindow"
     Width="800"
     Height="450"
+    DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
     mc:Ignorable="d">
 
     <Window.Resources>
@@ -15,5 +16,7 @@
             <ResourceDictionary.MergedDictionaries />
         </ResourceDictionary>
     </Window.Resources>
-    <Grid />
+    <Grid>
+        <TextBlock Text="{Binding Name}" />
+    </Grid>
 </Window>
