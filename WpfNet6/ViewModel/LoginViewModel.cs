@@ -1,4 +1,5 @@
-﻿using CommonTools.Log;
+﻿using CommonTools.Excel;
+using CommonTools.Log;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
@@ -60,6 +61,7 @@ namespace WpfNet6.ViewModel
 
             LogHelper.LogInfo("登录成功");
 
+            ////ExcelHelper.GetSaveFileRoute("TempData.xlsx");
             Num = 16.4E-1;
             ////TestSerializer();
         }
