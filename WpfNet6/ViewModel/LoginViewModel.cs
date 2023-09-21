@@ -2,10 +2,13 @@
 using CommonTools.Log;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using WpfNet6.Model.OtherModels;
@@ -45,17 +48,8 @@ namespace WpfNet6.ViewModel
             OnPropertyChanged(nameof(TestNotify));
         }
 
-        partial void OnPasswordChanged(string? oldValue, string? newValue)
-        {
-
-            if (string.IsNullOrWhiteSpace(newValue))
-                Password = oldValue;
-            else
-                Password = newValue;
-        }
-
-        [RelayCommand(CanExecute = nameof(CanButtonClick))]
-        private async Task LoginFunc()
+        [RelayCommand(CanExecute = nameof(CanButtonClick), IncludeCancelCommand = true)]
+        private async Task LoginFunc(CancellationToken cancellationToken)
         {
             await Task.Delay(1000);
 
@@ -69,9 +63,15 @@ namespace WpfNet6.ViewModel
 
             ////ExcelHelper.GetSaveFileRoute("TempData.xlsx");
             Num = 16.4E-1;
+
+            WeakReferenceMessenger.Default.Send(new ValueChangedMessage<string>("MessageRecived"));
+
+            var reply = WeakReferenceMessenger.Default.Send(new RequestMessage<string>());
+
+            var res = reply.Response;
         }
 
-        private bool CanButtonClick() => Enable;
+        private bool CanButtonClick => Enable;
 
     }
 }

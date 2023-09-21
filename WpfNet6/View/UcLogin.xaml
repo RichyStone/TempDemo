@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:WpfNet6.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:WpfNet6.ViewModel"
@@ -56,7 +57,18 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="3" Orientation="Horizontal">
-                    <CheckBox Content="IsRunning" IsChecked="{Binding LoginFuncCommand.IsRunning, Mode=OneWay}" />
+                    <CheckBox Content="IsRunning" IsChecked="{Binding LoginFuncCommand.IsRunning, Mode=OneWay}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseEnter">
+                                <i:ChangePropertyAction PropertyName="Foreground" Value="red" />
+                            </i:EventTrigger>
+
+                            <i:EventTrigger EventName="MouseLeave">
+                                <i:ChangePropertyAction PropertyName="Foreground" Value="black" />
+                            </i:EventTrigger>
+
+                        </i:Interaction.Triggers>
+                    </CheckBox>
                     <TextBlock Margin="20,0" Text="{Binding TestNotify, Mode=OneWay}" />
                 </StackPanel>
             </Grid>

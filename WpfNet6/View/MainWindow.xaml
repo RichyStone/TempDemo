@@ -33,9 +33,9 @@
         <UniformGrid
             Grid.Row="1"
             Columns="3"
-            FirstColumn="2"
+            FirstColumn="1"
             Rows="3">
-            <TextBlock Text="Test" />
+            <TextBlock Text="{Binding ReciveMessage}" />
             <TextBlock Text="Test" />
             <TextBlock Text="Test" />
             <TextBlock Text="Test" />
