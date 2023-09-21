@@ -23,7 +23,7 @@ namespace WpfNet6.ViewModel
         }
 
         [ObservableProperty]
-        //[NotifyPropertyChangedFor(nameof(TestNotify))]
+        [NotifyPropertyChangedFor(nameof(TestNotify))]
         private string? userName;
 
         [ObservableProperty]
@@ -45,7 +45,7 @@ namespace WpfNet6.ViewModel
             else
                 UserName = newValue;
 
-            OnPropertyChanged(nameof(TestNotify));
+            //OnPropertyChanged(nameof(TestNotify));
         }
 
         [RelayCommand(CanExecute = nameof(CanButtonClick), IncludeCancelCommand = true)]
