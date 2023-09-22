@@ -14,7 +14,15 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary />
+                <ResourceDictionary>
+                    <Style TargetType="TextBox">
+                        <Style.Triggers>
+                            <Trigger Property="Validation.HasError" Value="True">
+                                <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
@@ -37,11 +45,12 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
                     <TextBlock FontSize="16" Text="用户名" />
-                    <TextBox Margin="5,2" Text="{Binding UserName}" />
+                    <TextBox Margin="5,2" Text="{Binding UserName, ValidatesOnDataErrors=true}" />
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
@@ -49,7 +58,7 @@
                     <TextBox
                         Name="PassWord"
                         Margin="5,2"
-                        Text="{Binding Password}" />
+                        Text="{Binding Password, ValidatesOnNotifyDataErrors=True}" />
                     <Button Content="Clear">
                         <i:Interaction.Behaviors>
                             <commonui:ClearTxtBehavior Target="{Binding ElementName=PassWord}" />
@@ -141,6 +150,7 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="4" Orientation="Vertical">
+
                     <Border
                         Width="50"
                         Height="50"
@@ -153,6 +163,13 @@
                     </Border>
 
                     <TextBox>
+                        <TextBox.Text>
+                            <Binding Path="SndValidation" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <commonui:StringLengthRule MaxLength="5" MinLength="3" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
                         <i:Interaction.Behaviors>
                             <commonui:MouseWheelBehavior
                                 MaxValue="10.0"
@@ -161,7 +178,7 @@
                         </i:Interaction.Behaviors>
                     </TextBox>
 
-                    <TextBox>
+                    <TextBox Text="{Binding Validation, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}">
                         <i:Interaction.Behaviors>
                             <commonui:MouseWheelBehavior
                                 DecimalPlace="0"
@@ -171,7 +188,15 @@
                         </i:Interaction.Behaviors>
                     </TextBox>
 
+
+
                 </StackPanel>
+
+                <TextBox
+                    Grid.Row="5"
+                    Margin="20"
+                    Foreground="Red"
+                    Text="{Binding Error, Mode=OneWay}" />
             </Grid>
         </Border>
     </Grid>

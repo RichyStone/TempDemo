@@ -15,7 +15,7 @@ namespace WpfFrameWork.ViewModel
         public ViewModelLocator()
         {
             var _serviceCollection = new ServiceCollection();
-            _serviceCollection.AddSingleton<MainViewModel>();
+            _serviceCollection.AddTransient<MainViewModel>();
 
             _serviceProvider = _serviceCollection.BuildServiceProvider();
         }

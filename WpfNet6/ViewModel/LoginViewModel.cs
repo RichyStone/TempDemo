@@ -6,6 +6,9 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.IO.Packaging;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -15,18 +18,27 @@ using WpfNet6.Model.OtherModels;
 
 namespace WpfNet6.ViewModel
 {
-    public partial class LoginViewModel : ObservableObject
+    public partial class LoginViewModel : ObservableValidator, IDataErrorInfo
     {
         public LoginViewModel()
         {
+            ErrorsChanged += LoginViewModel_ErrorsChanged;
+        }
 
+        private void LoginViewModel_ErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
+        {
+            ValidateAllProperties();
         }
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(TestNotify))]
+        [NotifyPropertyChangedFor(nameof(Error))]
         private string? userName;
 
         [ObservableProperty]
+        //[NotifyDataErrorInfo]
+        [NotifyPropertyChangedFor(nameof(Error))]
+        [Range(0, 800, ErrorMessage = "out of range")]
         private string? password;
 
         [ObservableProperty]
@@ -37,6 +49,23 @@ namespace WpfNet6.ViewModel
 
         [ObservableProperty]
         private double? num;
+
+        private string validation;
+
+        public string Validation
+        {
+            get => validation;
+            set
+            {
+                if (value.Length is < 3 or > 6)
+                    throw new ArgumentException("User name must be Between 3 and 6 characters long");
+
+                SetProperty(ref validation, value);
+            }
+        }
+
+        [ObservableProperty]
+        private string sndValidation;
 
         partial void OnUserNameChanged(string? oldValue, string? newValue)
         {
@@ -73,5 +102,49 @@ namespace WpfNet6.ViewModel
 
         private bool CanButtonClick => Enable;
 
+        public string Error
+        {
+            get
+            {
+                var list = new List<string>() {
+                    this[nameof(UserName)],
+                    this[nameof(Password)]
+                };
+
+                list.AddRange(GetErrors().Select(err =>
+                {
+                    if (!string.IsNullOrEmpty(err.ErrorMessage))
+                        return err.ErrorMessage;
+                    else
+                        return string.Empty;
+                }).Where(err => !string.IsNullOrWhiteSpace(err)));
+
+                return string.Join(Environment.NewLine, list.Where(str => !string.IsNullOrWhiteSpace(str)));
+            }
+        }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                if (columnName == nameof(UserName))
+                {
+                    if (string.IsNullOrWhiteSpace(UserName))
+                        return "UserName is required";
+                    if (UserName.Length < 3)
+                        return "Username must be at least 3 characters long";
+
+                }
+                else if (columnName == nameof(Password))
+                {
+                    if (string.IsNullOrWhiteSpace(Password))
+                        return "Password is required";
+                    if (Password.Length < 3)
+                        return "Password must be at least 3 characters long";
+                }
+
+                return string.Empty;
+            }
+        }
     }
 }

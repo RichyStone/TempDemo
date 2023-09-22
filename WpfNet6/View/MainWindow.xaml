@@ -30,7 +30,7 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <local:UcLogin Height="200" VerticalAlignment="Top" />
+        <local:UcLogin VerticalAlignment="Top" />
 
         <UniformGrid
             Grid.Row="1"
@@ -38,7 +38,7 @@
             FirstColumn="1"
             Rows="3">
             <TextBlock Text="{Binding ReciveMessage}" />
-            <TextBlock Text="Test" />
+            <TextBlock Text="{Binding}" />
             <TextBlock Text="Test" />
             <TextBlock Text="Test" />
             <TextBlock Text="Test" />
@@ -54,7 +54,7 @@
             <Button Content="Close">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
-                        <i:CallMethodAction MethodName="Close" TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+                        <i:CallMethodAction MethodName="Close" TargetObject="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1, AncestorType=Window}}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Button>
