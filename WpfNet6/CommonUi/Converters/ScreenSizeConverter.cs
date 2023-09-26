@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace WpfNet6.Converters
+namespace WpfNet6.CommonUi.Converters
 {
     public class ScreenSizeConverter : IValueConverter
     {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace WpfNet6.CommonUi
+namespace WpfNet6.CommonUi.Validation
 {
     public class StringLengthRule : ValidationRule
     {

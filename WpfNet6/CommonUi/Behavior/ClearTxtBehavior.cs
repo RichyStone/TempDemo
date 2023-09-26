@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace WpfNet6.CommonUi
+namespace WpfNet6.CommonUi.Behavior
 {
     public class ClearTxtBehavior : Behavior<Button>
     {
@@ -26,7 +26,7 @@ namespace WpfNet6.CommonUi
             base.OnAttached();
             AssociatedObject.Click += ClearFuction;
         }
-       
+
         protected override void OnDetaching()
         {
             base.OnDetaching();

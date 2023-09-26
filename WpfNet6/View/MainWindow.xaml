@@ -2,19 +2,20 @@
     x:Class="WpfNet6.View.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:bind="clr-namespace:WpfNet6.CommonUi.BindingProxy"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:WpfNet6.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:WpfNet6.ViewModel"
     Title="MainWindow"
-    Width="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={StaticResource screenConverter}}"
-    Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={StaticResource screenConverter}}"
     mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary />
+                <ResourceDictionary>
+                    <bind:BindingProxy x:Key="BindingProxy" Data="{Binding ElementName=Login}" />
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -30,7 +31,7 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <local:UcLogin VerticalAlignment="Top" />
+        <local:UcLogin x:Name="Login" VerticalAlignment="Top" />
 
         <UniformGrid
             Grid.Row="1"
@@ -38,7 +39,7 @@
             FirstColumn="1"
             Rows="3">
             <TextBlock Text="{Binding ReciveMessage}" />
-            <TextBlock Text="{Binding}" />
+            <TextBlock Text="{Binding Source={StaticResource BindingProxy}, Path=Data.Name}" />
             <TextBlock Text="Test" />
             <TextBlock Text="Test" />
             <TextBlock Text="Test" />

@@ -2,7 +2,7 @@
     <ResourceDictionary.MergedDictionaries>
 
         <!--#region Converter-->
-        <ResourceDictionary xmlns:convert="clr-namespace:WpfNet6.Converters">
+        <ResourceDictionary xmlns:convert="clr-namespace:WpfNet6.CommonUi.Converters">
             <convert:ScreenSizeConverter x:Key="screenConverter" />
             <convert:Int2stringConverter x:Key="int2strConverter" />
         </ResourceDictionary>
@@ -78,12 +78,6 @@
                 <Border />
             </ControlTemplate>
 
-        </ResourceDictionary>
-        <!--#endregion-->
-
-        <!--#region BindingProxy-->
-        <ResourceDictionary xmlns:bind="clr-namespace:WpfNet6.CommonUi">
-            <bind:BindingProxy x:Key="BindingProxy" Data="{Binding}" />
         </ResourceDictionary>
         <!--#endregion-->
 

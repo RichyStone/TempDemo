@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 
-namespace WpfNet6.CommonUi
+namespace WpfNet6.CommonUi.AttachedProperty
 {
     public class AttachedProperty
     {
@@ -25,7 +25,7 @@ namespace WpfNet6.CommonUi
             DependencyProperty.RegisterAttached(nameof(HasText), typeof(bool), typeof(AttachedProperty),
                 new PropertyMetadata(false, (d, e) =>
             {
-                
+
             }));
 
     }

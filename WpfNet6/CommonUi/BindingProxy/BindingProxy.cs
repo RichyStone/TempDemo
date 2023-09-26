@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace WpfNet6.CommonUi
+namespace WpfNet6.CommonUi.BindingProxy
 {
     internal class BindingProxy : Freezable
     {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace WpfNet6.CommonUi
+namespace WpfNet6.CommonUi.Behavior
 {
     public class BorderBehavior : Behavior<Border>
     {

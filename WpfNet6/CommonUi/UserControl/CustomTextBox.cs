@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace WpfNet6.CommonUi
+namespace WpfNet6.CommonUi.UserControl
 {
     public class CustomTextBox : TextBox
     {
