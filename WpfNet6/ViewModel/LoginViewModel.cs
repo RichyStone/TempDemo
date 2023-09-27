@@ -1,5 +1,4 @@
-﻿using CommonTools.Excel;
-using CommonTools.Log;
+﻿using CommonTools.Log;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;

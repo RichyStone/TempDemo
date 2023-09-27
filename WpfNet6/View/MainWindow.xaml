@@ -2,13 +2,14 @@
     x:Class="WpfNet6.View.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:bind="clr-namespace:WpfNet6.CommonUi.BindingProxy"
+    xmlns:bind="http://CommonUILib/UIResource/BindingProxy"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:WpfNet6.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:WpfNet6.ViewModel"
     Title="MainWindow"
+    DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
     mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary>
@@ -19,10 +20,6 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-
-    <Window.DataContext>
-        <vm:MainViewModel />
-    </Window.DataContext>
 
     <Grid>
         <Grid.RowDefinitions>

@@ -8,7 +8,35 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CommonUi\AttachedProperty\**" />
+    <Compile Remove="CommonUi\Behavior\**" />
+    <Compile Remove="CommonUi\BindingProxy\**" />
+    <Compile Remove="CommonUi\MessagerTools\**" />
+    <Compile Remove="CommonUi\UserControl\**" />
+    <Compile Remove="CommonUi\Validation\**" />
+    <EmbeddedResource Remove="CommonUi\AttachedProperty\**" />
+    <EmbeddedResource Remove="CommonUi\Behavior\**" />
+    <EmbeddedResource Remove="CommonUi\BindingProxy\**" />
+    <EmbeddedResource Remove="CommonUi\MessagerTools\**" />
+    <EmbeddedResource Remove="CommonUi\UserControl\**" />
+    <EmbeddedResource Remove="CommonUi\Validation\**" />
+    <None Remove="CommonUi\AttachedProperty\**" />
+    <None Remove="CommonUi\Behavior\**" />
+    <None Remove="CommonUi\BindingProxy\**" />
+    <None Remove="CommonUi\MessagerTools\**" />
+    <None Remove="CommonUi\UserControl\**" />
+    <None Remove="CommonUi\Validation\**" />
+    <Page Remove="CommonUi\AttachedProperty\**" />
+    <Page Remove="CommonUi\Behavior\**" />
+    <Page Remove="CommonUi\BindingProxy\**" />
+    <Page Remove="CommonUi\MessagerTools\**" />
+    <Page Remove="CommonUi\UserControl\**" />
+    <Page Remove="CommonUi\Validation\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="XamlAnimatedGif" Version="2.2.0">
       <TreatAsUsed>true</TreatAsUsed>
@@ -17,6 +45,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CommonTools\CommonTools.csproj" />
+    <ProjectReference Include="..\CommonUILib\CommonUILib.csproj" />
   </ItemGroup>
 
   <ItemGroup>

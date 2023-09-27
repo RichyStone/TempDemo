@@ -4,7 +4,7 @@ using System;
 using System.Data;
 using System.IO;
 
-namespace CommonTools.Excel
+namespace CommonTools.McsFile.Excel
 {
     public static class ExcelHelper
     {
@@ -118,7 +118,7 @@ namespace CommonTools.Excel
                 dt.Columns.Add(cell.ToString());
             }
 
-            for (int i = (sheet.FirstRowNum + 1); i <= sheet.LastRowNum; i++)
+            for (int i = sheet.FirstRowNum + 1; i <= sheet.LastRowNum; i++)
             {
                 IRow row = sheet.GetRow(i);
                 DataRow dataRow = dt.NewRow();
@@ -305,13 +305,13 @@ namespace CommonTools.Excel
 
             //创建一个样式
             ICellStyle style = workbook.CreateCellStyle();
-            style.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;//水平对齐
-            style.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;//垂直对齐
+            style.Alignment = HorizontalAlignment.Center;//水平对齐
+            style.VerticalAlignment = VerticalAlignment.Center;//垂直对齐
 
-            style.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;//下边框为细线边框
-            style.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;//左边框
-            style.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;//上边框
-            style.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;//右边框
+            style.BorderBottom = BorderStyle.Thin;//下边框为细线边框
+            style.BorderLeft = BorderStyle.Thin;//左边框
+            style.BorderRight = BorderStyle.Thin;//上边框
+            style.BorderTop = BorderStyle.Thin;//右边框
 
             #endregion
 

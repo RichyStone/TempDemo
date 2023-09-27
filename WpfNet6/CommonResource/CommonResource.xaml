@@ -1,6 +1,17 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
 
+        <!--#region ViewModelLocator-->
+        <ResourceDictionary xmlns:vm="clr-namespace:WpfNet6.ViewModel">
+            <vm:ViewModelLocator x:Key="Locator" />
+        </ResourceDictionary>
+        <!--#endregion-->
+
+        <ResourceDictionary xmlns:selctor="clr-namespace:WpfNet6.CommonUi.TemplateSelector">
+            <selctor:ParamTemplateSelector x:Key="ParamSelector" />
+        </ResourceDictionary>
+
+
         <!--#region Converter-->
         <ResourceDictionary xmlns:convert="clr-namespace:WpfNet6.CommonUi.Converters">
             <convert:ScreenSizeConverter x:Key="screenConverter" />
@@ -24,7 +35,10 @@
         <!--#endregion-->
 
         <!--#region Style-->
+
         <ResourceDictionary>
+
+            <!--#region BUtton-->
             <Style TargetType="Button">
                 <Style.Setters>
                     <Setter Property="Template">
@@ -68,14 +82,119 @@
                     </Setter>
                 </Style.Setters>
             </Style>
+            <!--#endregion-->
+
+            <!--#region DataGrid-->
+
+            <!--  网格线颜色  -->
+            <Style TargetType="DataGrid">
+                <!--  该属性指示是否允许用户调整列宽度  -->
+                <Setter Property="CanUserResizeColumns" Value="True" />
+                <Setter Property="Background" Value="#555a64" />
+                <Setter Property="BorderBrush" Value="Gray" />
+                <Setter Property="SelectionUnit" Value="FullRow" />
+                <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+                <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
+                <Setter Property="RowHeaderWidth" Value="0" />
+                <Setter Property="HorizontalGridLinesBrush">
+                    <Setter.Value>
+                        <SolidColorBrush Color="#d6c79b" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="VerticalGridLinesBrush">
+                    <Setter.Value>
+                        <SolidColorBrush Color="#d6c79b" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!--  列头标题栏样式  -->
+            <Style TargetType="DataGridColumnHeader">
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="Background" Value="#555a64" />
+                <Setter Property="Foreground" Value="#dddddd" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush" Value="Gray" />
+                <Setter Property="Height" Value="30" />
+                <Setter Property="FontSize" Value="17" />
+            </Style>
+
+            <!--  背景色改变必须先设置cellStyle 因为cellStyle会覆盖rowStyle样式，换行换色  -->
+            <Style TargetType="DataGridRow">
+                <Setter Property="Height" Value="30" />
+                <Style.Triggers>
+                    <Trigger Property="AlternationIndex" Value="0">
+                        <Setter Property="Background" Value="#e7e7e7" />
+                    </Trigger>
+                    <Trigger Property="AlternationIndex" Value="1">
+                        <Setter Property="Background" Value="#f2f2f2" />
+                        <!--  f1ef9f  -->
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#f1ef9f" />
+                    </Trigger>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="#05c4ff" />
+                    </Trigger>
+                    <Trigger Property="IsFocused" Value="True">
+                        <Setter Property="Background" Value="#05c4ff" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--  单元格样式  -->
+            <Style TargetType="DataGridCell">
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="BorderBrush" Value="Gray" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type DataGridCell}">
+                            <Grid Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="gridTextStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+
+            <!--#endregion-->
 
         </ResourceDictionary>
         <!--#endregion-->
 
         <!--#region Template-->
         <ResourceDictionary>
-            <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
-                <Border />
+
+            <ControlTemplate x:Key="tempListBox" TargetType="ListBox">
+                <ListBox>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="Margin" Value="10,5" />
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="10,0" Text="{Binding ModelDescription}" />
+                                    <TextBox Margin="10,0" Text="{Binding ModelValue}" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </ControlTemplate>
 
         </ResourceDictionary>
