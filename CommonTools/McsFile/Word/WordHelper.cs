@@ -4,14 +4,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace CommonTools.McsFile.Word
 {
     public static class WordHelper
     {
-
         public static void CreateNewDoc(string path)
         {
             XWPFDocument doc = new XWPFDocument();
@@ -49,11 +47,11 @@ namespace CommonTools.McsFile.Word
 
                 using (var stream = new FileStream(Path.Combine(directory, $"{fileName}.docx"), FileMode.Create, FileAccess.Write))
                 {
-
                     //创建document文档对象对象实例
                     XWPFDocument document = new XWPFDocument();
 
                     #region 页脚
+
                     document.Document.body.sectPr = new CT_SectPr();
 
                     var with = document.Document.body.sectPr.pgSz.w;
@@ -82,9 +80,11 @@ namespace CommonTools.McsFile.Word
                     CT_HdrFtrRef m_HdrFtr1 = m_SectPr.AddNewFooterReference();
                     m_HdrFtr1.type = ST_HdrFtr.@default;
                     m_HdrFtr1.id = m_f.GetPackageRelationship().Id;
-                    #endregion
+
+                    #endregion 页脚
 
                     #region 头部
+
                     int pos = 0;
                     //图片标题
                     //document.SetParagraph(ParagraphInsertImg(document, ""), 0);
@@ -150,10 +150,10 @@ namespace CommonTools.McsFile.Word
                     //firstXwpfTable.GetRow(7).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, ":", ParagraphAlignment.RIGHT, 24, true, 10));
                     //firstXwpfTable.GetRow(7).GetCell(2).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, $"", ParagraphAlignment.LEFT, 24, false));
 
-
-                    #endregion
+                    #endregion 头部
 
                     #region 内容
+
                     //文本
                     document.SetParagraph(ParagraphInstanceSetting(document, "xxxx.", false, 10, "宋体", ParagraphAlignment.LEFT), pos++);
 
@@ -182,16 +182,17 @@ namespace CommonTools.McsFile.Word
                     document.SetParagraph(ParagraphInstanceSetting(document, " •    ", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
                     document.SetParagraph(ParagraphInstanceSetting(document, " •    （包括液体和冻干制剂）", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
 
-
                     //下划线标题
                     document.SetParagraph(ParagraphInstanceSetting(document, $"，", true, 12, "宋体", ParagraphAlignment.LEFT, UnderlinePatterns.None, "000000", false), pos++);
                     document.SetParagraph(ParagraphInstanceSetting(document, $"", true, 12, "宋体", ParagraphAlignment.LEFT, UnderlinePatterns.None, "000000", false), pos++);
                     document.SetParagraph(ParagraphInstanceSetting(document, @"", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
 
                     document.SetParagraph(ParagraphInstanceSetting(document, $"表格1", true, 12, "宋体", ParagraphAlignment.LEFT, UnderlinePatterns.None, "000000", false), pos++);
-                    #endregion
+
+                    #endregion 内容
 
                     #region 文档第一个表格对象实例
+
                     //创建文档中的表格对象实例
                     XWPFTable firstXwpfTable1 = document.CreateTable(2, 3);//显示的行列数rows:3行,cols:4列
                     firstXwpfTable1.Width = 3000;//总宽度
@@ -249,12 +250,14 @@ namespace CommonTools.McsFile.Word
                     firstXwpfTable2.SetColumnWidth(0, 1000); /* 设置列宽 */
                     firstXwpfTable2.SetColumnWidth(1, 1000); /* 设置列宽 */
                     firstXwpfTable2.SetColumnWidth(2, 1000); /* 设置列宽 */
-                    #endregion
+
+                    #endregion 文档第一个表格对象实例
 
                     var checkPeopleNum = 0;//检查人数
                     var totalScore = 0;//总得分
 
                     #region 文档第二个表格对象实例（遍历表格项）
+
                     //创建文档中的表格对象实例
                     XWPFTable secoedXwpfTable = document.CreateTable(5, 4);//显示的行列数rows:8行,cols:4列
                     secoedXwpfTable.Width = 5200;//总宽度
@@ -281,9 +284,10 @@ namespace CommonTools.McsFile.Word
                         totalScore += 90 + i;
                     }
 
-                    #endregion
+                    #endregion 文档第二个表格对象实例（遍历表格项）
 
                     #region 文档第三个表格对象实例
+
                     //创建文档中的表格对象实例
                     XWPFTable thirdXwpfTable = document.CreateTable(5, 4);//显示的行列数rows:5行,cols:4列
                     thirdXwpfTable.Width = 5200;//总宽度
@@ -319,7 +323,7 @@ namespace CommonTools.McsFile.Word
 
                     //thirdXwpfTable.GetRow(4).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, thirdXwpfTable, "                                                                                                                                                                                                 企业法人签名：              年 月 日", ParagraphAlignment.LEFT, 30, false));
 
-                    //创建表格 
+                    //创建表格
                     var col = 5;
                     XWPFTable table = document.CreateTable(1, 5);//思路，数据一行一行画
                     table.RemoveRow(0);//去掉第一行空白的
@@ -333,8 +337,8 @@ namespace CommonTools.McsFile.Word
                     }
 
                     CT_Row nr = new CT_Row();
-                    XWPFTableRow mr = new XWPFTableRow(nr, table);//创建行 
-                    table.AddRow(mr);//将行添加到table中 
+                    XWPFTableRow mr = new XWPFTableRow(nr, table);//创建行
+                    table.AddRow(mr);//将行添加到table中
 
                     XWPFTableCell c1 = mr.CreateCell();//创建单元格
                     CT_Tc ct = c1.GetCTTc();
@@ -359,11 +363,10 @@ namespace CommonTools.McsFile.Word
                     ct = c1.GetCTTc();
                     cp = ct.AddNewTcPr();
                     cp.gridSpan = new CT_DecimalNumber();
-                    cp.gridSpan.val = Convert.ToString(col - 3); //合并列  
+                    cp.gridSpan.val = Convert.ToString(col - 3); //合并列
                     cp.AddNewVAlign().val = ST_VerticalJc.center;
                     ct.GetPList()[0].AddNewPPr().AddNewJc().val = ST_Jc.center;//单元格内容居中显示
                     ct.GetPList()[0].AddNewR().AddNewT().Value = "年龄段";
-
 
                     c1 = mr.CreateCell();//创建单元格
                     ct = c1.GetCTTc();
@@ -374,7 +377,6 @@ namespace CommonTools.McsFile.Word
                     ct.GetPList()[0].AddNewPPr().AddNewJc().val = ST_Jc.center;
                     ct.GetPList()[0].AddNewR().AddNewT().Value = "合计";
                     //=====第一行表头结束=========
-
 
                     //2行，多行合并类似
                     nr = new CT_Row();
@@ -401,16 +403,16 @@ namespace CommonTools.McsFile.Word
                     ct = c1.GetCTTc();
                     cp = ct.AddNewTcPr();
                     cp.AddNewVMerge().val = ST_Merge.@continue;//合并行 合计
-                    #endregion
+
+                    #endregion 文档第三个表格对象实例
+
                     //向文档流中写入内容，生成word
                     document.Write(stream);
-
                 }
             }
             catch (Exception ex)
             {
             }
-
         }
 
         /// <summary>
@@ -595,19 +597,19 @@ namespace CommonTools.McsFile.Word
             return paragraph;
         }
 
-        /// <summary> 
+        /// <summary>
         /// 创建Word文档中表格段落实例和设置表格段落文本的基本样式（字体大小，字体，字体颜色，字体对齐位置）
-        /// </summary> 
-        /// <param name="document">document文档对象</param> 
-        /// <param name="table">表格对象</param> 
-        /// <param name="fillContent">要填充的文字</param> 
+        /// </summary>
+        /// <param name="document">document文档对象</param>
+        /// <param name="table">表格对象</param>
+        /// <param name="fillContent">要填充的文字</param>
         /// <param name="paragraphAlign">段落排列（左对齐，居中，右对齐）</param>
         /// <param name="textPosition">设置文本位置（设置两行之间的行间,从而实现表格文字垂直居中的效果），从而实现table的高度设置效果 </param>
         /// <param name="isBold">是否加粗（true加粗，false不加粗）</param>
         /// <param name="fontSize">字体大小</param>
         /// <param name="fontColor">字体颜色--十六进制</param>
         /// <param name="isItalic">是否设置斜体（字体倾斜）</param>
-        /// <returns></returns> 
+        /// <returns></returns>
         public static XWPFParagraph SetTableParagraphInstanceSetting(XWPFTable table, string fillContent, ParagraphAlignment paragraphAlign, bool isBold = false, double fontSize = 10, string fontColor = "000000", bool isItalic = false)
         {
             var para = new CT_P();

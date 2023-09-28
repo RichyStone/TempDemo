@@ -1,11 +1,7 @@
 ﻿using CommonTools.Log;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using WpfNet6.View;
@@ -181,7 +177,6 @@ namespace WpfNet6.GlobalManager
 
             return control;
         }
-
     }
 
     /// <summary>
@@ -199,7 +194,5 @@ namespace WpfNet6.GlobalManager
     public enum ControlType
     {
         None,
-
     }
-
 }

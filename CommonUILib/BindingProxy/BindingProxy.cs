@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace CommonUILib.BindingProxy
 {
@@ -19,8 +14,5 @@ namespace CommonUILib.BindingProxy
 
         public static readonly DependencyProperty DataProperty =
             DependencyProperty.Register(nameof(Data), typeof(object), typeof(BindingProxy));
-
-
-
     }
 }

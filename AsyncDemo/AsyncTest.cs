@@ -106,7 +106,6 @@
             //Parallel.ForEach()
 
             Parallel.Invoke(new ParallelOptions { MaxDegreeOfParallelism = 5 }, () => { }, () => { });
-
         }
 
         private static void PLinq(IEnumerable<int> ints)
@@ -116,7 +115,7 @@
             ints.AsParallel();
         }
 
-        #endregion
+        #endregion 调用
 
         #region 读写锁
 
@@ -201,7 +200,6 @@
                 }
 
                 readWriteLock.ExitWriteLock();
-
             }
             catch (Exception ex)
             {
@@ -241,7 +239,6 @@
             }
         }
 
-        #endregion
-
+        #endregion 读写锁
     }
 }

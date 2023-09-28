@@ -1,9 +1,4 @@
 ﻿using Microsoft.Xaml.Behaviors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -17,7 +12,6 @@ namespace CommonUILib.CustomBehavior
             AssociatedObject.MouseEnter += (d, e) => { AssociatedObject.Background = Brushes.Blue; };
             AssociatedObject.MouseLeave += (d, e) => { AssociatedObject.Background = Brushes.Red; };
         }
-
 
         protected override void OnDetaching()
         {

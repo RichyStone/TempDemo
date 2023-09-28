@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace CommonTools.Serialize
 {
     public static class XmlSerializeHelper
     {
-
         /// <summary>
         /// 把对象使用XML格式写入本地文件
         /// </summary>
@@ -86,6 +82,5 @@ namespace CommonTools.Serialize
                 return t;
             }
         }
-
     }
 }

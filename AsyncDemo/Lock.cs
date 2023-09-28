@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AsyncDemo
+﻿namespace AsyncDemo
 {
     public class Lock
     {
@@ -51,7 +44,6 @@ namespace AsyncDemo
             try
             {
                 Monitor.Enter(obj, ref taken);
-
             }
             finally
             {
@@ -62,7 +54,6 @@ namespace AsyncDemo
             //var res = Monitor.Wait(obj, 2000);
             //Monitor.PulseAll(obj);
             //Monitor.Pulse(obj);
-
         }
 
         private int testLock = 1;
@@ -78,8 +69,6 @@ namespace AsyncDemo
         {
             ////lock (mutex)
             ////{
-
-
             ////}
 
             ////try
@@ -102,6 +91,5 @@ namespace AsyncDemo
             ////readerWriterLock.AcquireReaderLock(TimeSpan.FromSeconds(10));
             ////readerWriterLock.ReleaseReaderLock();
         }
-
     }
 }

@@ -27,7 +27,6 @@
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-
     </UserControl.Resources>
 
     <Grid>
@@ -123,7 +122,6 @@
                                             </BeginStoryboard>
                                         </EventTrigger.Actions>
                                     </EventTrigger>
-
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>
@@ -141,7 +139,6 @@
                             <i:EventTrigger EventName="MouseLeave">
                                 <i:ChangePropertyAction PropertyName="Foreground" Value="black" />
                             </i:EventTrigger>
-
                         </i:Interaction.Triggers>
                     </CheckBox>
                     <TextBlock Margin="20,0" Text="{Binding TestNotify, Mode=OneWay}" />
@@ -185,9 +182,6 @@
                                 Scale="5" />
                         </i:Interaction.Behaviors>
                     </TextBox>
-
-
-
                 </StackPanel>
 
                 <TextBox
@@ -198,5 +192,4 @@
             </Grid>
         </Border>
     </Grid>
-
 </UserControl>

@@ -1,16 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WpfFrameWork.ViewModel
 {
     public class ViewModelLocator
     {
-        IServiceProvider _serviceProvider;
+        private IServiceProvider _serviceProvider;
 
         public ViewModelLocator()
         {
@@ -21,6 +16,5 @@ namespace WpfFrameWork.ViewModel
         }
 
         public MainViewModel MainViewModel => _serviceProvider.GetService<MainViewModel>();
-
     }
 }

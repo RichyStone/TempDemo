@@ -59,7 +59,8 @@ namespace CommonTools.McsFile.Excel
                 throw;
             }
         }
-        #endregion
+
+        #endregion 导出
 
         #region 自定义框架，导出
 
@@ -87,11 +88,12 @@ namespace CommonTools.McsFile.Excel
             //workbook.Dispose();
         }
 
-        #endregion
+        #endregion 自定义框架，导出
 
-        #endregion
+        #endregion 导出Excel
 
         #region 读取Excel
+
         /// <summary>
         /// 读取Excel文件到DataTable中
         /// </summary>
@@ -134,7 +136,7 @@ namespace CommonTools.McsFile.Excel
             return dt;
         }
 
-        #endregion
+        #endregion 读取Excel
 
         #region 获取用户选择保存路径
 
@@ -171,7 +173,7 @@ namespace CommonTools.McsFile.Excel
         //    }
         //}
 
-        #endregion
+        #endregion 获取用户选择保存路径
 
         #region 保存文件
 
@@ -193,7 +195,7 @@ namespace CommonTools.McsFile.Excel
             }
         }
 
-        #endregion
+        #endregion 保存文件
 
         #region 创建表格
 
@@ -220,7 +222,7 @@ namespace CommonTools.McsFile.Excel
                 row.GetCell(i).CellStyle = style;
             }
 
-            #endregion
+            #endregion 创建列名
 
             #region 创建行
 
@@ -250,16 +252,19 @@ namespace CommonTools.McsFile.Excel
                         case "System.String"://字符串类型
                             row.CreateCell(j).SetCellValue(Value);
                             break;
+
                         case "System.DateTime"://日期类型
                             DateTime dateV;
                             DateTime.TryParse(Value, out dateV);
                             row.CreateCell(j).SetCellValue(dateV.ToString("yyyy-MM-dd"));
                             break;
+
                         case "System.Boolean"://布尔型
                             bool boolV = false;
                             bool.TryParse(Value, out boolV);
                             row.CreateCell(j).SetCellValue(boolV);
                             break;
+
                         case "System.Int16"://整型
                         case "System.Int32":
                         case "System.Int64":
@@ -268,14 +273,17 @@ namespace CommonTools.McsFile.Excel
                             int.TryParse(Value, out intV);
                             row.CreateCell(j).SetCellValue(intV);
                             break;
+
                         case "System.Decimal"://浮点型
                         case "System.Double":
                             if (double.TryParse(Value, out double doubV))
                                 row.CreateCell(j).SetCellValue(doubV);
                             break;
+
                         case "System.DBNull"://空值处理
                             row.CreateCell(j).SetCellValue("");
                             break;
+
                         default:
                             row.CreateCell(j).SetCellValue("");
                             break;
@@ -286,7 +294,7 @@ namespace CommonTools.McsFile.Excel
                 }
             }
 
-            #endregion
+            #endregion 创建行
 
             //循环列名数组，多所有列 设置 自动列宽
             for (int i = 0; i < strArry.Length; i++)
@@ -295,7 +303,7 @@ namespace CommonTools.McsFile.Excel
             }
         }
 
-        #endregion
+        #endregion 创建表格
 
         #region 设置单元格样式
 
@@ -313,11 +321,11 @@ namespace CommonTools.McsFile.Excel
             style.BorderRight = BorderStyle.Thin;//上边框
             style.BorderTop = BorderStyle.Thin;//右边框
 
-            #endregion
+            #endregion 单元格样式
 
             return style;
         }
 
-        #endregion
+        #endregion 设置单元格样式
     }
 }

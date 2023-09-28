@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace CommonUILib.UserControl
 {
     public class CustomTextBox : TextBox
     {
-
         public bool IsHighLighted
         {
             get { return (bool)GetValue(IsHighLightedProperty); }
@@ -24,15 +18,12 @@ namespace CommonUILib.UserControl
                 typeof(CustomTextBox),
                 new PropertyMetadata(false, (d, e) =>
                 {
-
                 }));
-
 
         static CustomTextBox()
         {
             HasTextPropertyKey = DependencyProperty.RegisterReadOnly("HasText", typeof(bool), typeof(CustomTextBox), new PropertyMetadata(false));
             HasTextProperty = HasTextPropertyKey.DependencyProperty;
-
         }
 
         public bool HasText
@@ -43,6 +34,5 @@ namespace CommonUILib.UserControl
         public static readonly DependencyPropertyKey HasTextPropertyKey;
 
         public static readonly DependencyProperty HasTextProperty;
-
     }
 }

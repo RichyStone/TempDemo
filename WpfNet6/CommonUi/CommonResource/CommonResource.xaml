@@ -1,4 +1,5 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
 
         <!--#region ViewModelLocator-->
@@ -10,7 +11,6 @@
         <ResourceDictionary xmlns:selctor="clr-namespace:WpfNet6.CommonUi.TemplateSelector">
             <selctor:ParamTemplateSelector x:Key="ParamSelector" />
         </ResourceDictionary>
-
 
         <!--#region Converter-->
         <ResourceDictionary xmlns:convert="clr-namespace:WpfNet6.CommonUi.Converters">
@@ -167,7 +167,6 @@
             </Style>
 
             <!--#endregion-->
-
         </ResourceDictionary>
         <!--#endregion-->
 
@@ -196,9 +195,7 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </ControlTemplate>
-
         </ResourceDictionary>
         <!--#endregion-->
-
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

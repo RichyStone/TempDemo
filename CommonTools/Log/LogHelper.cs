@@ -1,10 +1,6 @@
-﻿using log4net.Repository.Hierarchy;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
 
 namespace CommonTools.Log
 {
@@ -14,7 +10,7 @@ namespace CommonTools.Log
         /// 信息Logger
         /// </summary>
         private static readonly log4net.ILog loginfo = log4net.LogManager.GetLogger("loginfo");
-        
+
         /// <summary>
         /// 错误Logger
         /// </summary>
@@ -125,7 +121,5 @@ namespace CommonTools.Log
                 logerror.Error(info, ex);
             }
         }
-
     }
-
 }

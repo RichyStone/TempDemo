@@ -7,13 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.IO.Packaging;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using WpfNet6.Model.OtherModels;
 
 namespace WpfNet6.ViewModel
 {
@@ -66,7 +63,7 @@ namespace WpfNet6.ViewModel
         [ObservableProperty]
         private string sndValidation;
 
-        partial void OnUserNameChanged(string? oldValue, string? newValue)
+        private partial void OnUserNameChanged(string? oldValue, string? newValue)
         {
             if (string.IsNullOrWhiteSpace(newValue))
                 UserName = oldValue;
@@ -132,7 +129,6 @@ namespace WpfNet6.ViewModel
                         return "UserName is required";
                     if (UserName.Length < 3)
                         return "Username must be at least 3 characters long";
-
                 }
                 else if (columnName == nameof(Password))
                 {

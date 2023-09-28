@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace WpfNet6.ViewModel
 {
@@ -24,6 +19,5 @@ namespace WpfNet6.ViewModel
         public MainViewModel MainViewModel => _serviceProvider.GetService<MainViewModel>();
 
         public LoginViewModel LoginViewModel => _serviceProvider.GetService<LoginViewModel>();
-
     }
 }
