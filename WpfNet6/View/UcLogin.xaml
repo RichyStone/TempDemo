@@ -30,10 +30,7 @@
     </UserControl.Resources>
 
     <Grid>
-        <Border
-            BorderBrush="AliceBlue"
-            BorderThickness="1"
-            CornerRadius="3">
+        <Border BorderBrush="AliceBlue" BorderThickness="1" CornerRadius="3">
 
             <Grid Margin="5" TextElement.FontSize="16">
                 <Grid.RowDefinitions>
@@ -52,10 +49,7 @@
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <TextBlock FontSize="16" Text="密码" />
-                    <TextBox
-                        Name="PassWord"
-                        Margin="5,2"
-                        Text="{Binding Password, ValidatesOnNotifyDataErrors=True}" />
+                    <TextBox Name="PassWord" Margin="5,2" Text="{Binding Password, ValidatesOnNotifyDataErrors=True}" />
                     <Button Content="Clear">
                         <i:Interaction.Behaviors>
                             <behavior:ClearTxtBehavior Target="{Binding ElementName=PassWord}" />
@@ -64,18 +58,12 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
-                    <CheckBox
-                        Height="20"
-                        Content="Enabled"
-                        IsChecked="{Binding Enable}">
+                    <CheckBox Height="20" Content="Enabled" IsChecked="{Binding Enable}">
                         <i:Interaction.Behaviors>
                             <i:MouseDragElementBehavior />
                         </i:Interaction.Behaviors>
                     </CheckBox>
-                    <Button
-                        Margin="50,0"
-                        Command="{Binding LoginFuncCommand}"
-                        Content="登录">
+                    <Button Margin="50,0" Command="{Binding LoginFuncCommand}" Content="登录">
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Foreground" Value="Black" />
@@ -114,10 +102,7 @@
                                         <EventTrigger.Actions>
                                             <BeginStoryboard>
                                                 <Storyboard>
-                                                    <DoubleAnimation
-                                                        Storyboard.TargetProperty="Height"
-                                                        To="30"
-                                                        Duration="0:0:0.3" />
+                                                    <DoubleAnimation Storyboard.TargetProperty="Height" To="30" Duration="0:0:0.3" />
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </EventTrigger.Actions>
@@ -166,10 +151,7 @@
                             </Binding>
                         </TextBox.Text>
                         <i:Interaction.Behaviors>
-                            <behavior:MouseWheelBehavior
-                                MaxValue="10.0"
-                                MinValue="1.0"
-                                Scale="0.2" />
+                            <behavior:MouseWheelBehavior MaxValue="10.0" MinValue="1.0" Scale="0.2" />
                         </i:Interaction.Behaviors>
                     </TextBox>
 
