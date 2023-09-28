@@ -63,7 +63,7 @@ namespace WpfNet6.ViewModel
         [ObservableProperty]
         private string sndValidation;
 
-        private partial void OnUserNameChanged(string? oldValue, string? newValue)
+        partial void OnUserNameChanged(string? oldValue, string? newValue)
         {
             if (string.IsNullOrWhiteSpace(newValue))
                 UserName = oldValue;
@@ -137,7 +137,6 @@ namespace WpfNet6.ViewModel
                     if (Password.Length < 3)
                         return "Password must be at least 3 characters long";
                 }
-
                 return string.Empty;
             }
         }

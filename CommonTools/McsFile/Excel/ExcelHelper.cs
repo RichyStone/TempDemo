@@ -11,7 +11,7 @@ namespace CommonTools.McsFile.Excel
         /// <summary>
         /// Excel行高，Height的单位是1/20个点。例：设置高度为25个点
         /// </summary>
-        private static short rowHeight = 20 * 20;
+        private static readonly short rowHeight = 20 * 20;
 
         #region 导出Excel
 
@@ -22,9 +22,9 @@ namespace CommonTools.McsFile.Excel
         /// </summary>
         /// <param name="dt">数据源</param>
         /// <param name="strHeader">列名</param>
-        /// <param name="fileName">绝对路径</param>
+        /// <param name="filePath">绝对路径</param>
         /// <param name="sheetName">sheet页名</param>
-        public static void Export(DataTable dt, string strHeader, string fileName, string sheetName = "Sheet1")
+        public static void Export(DataTable dt, string strHeader, string filePath, string sheetName = "Sheet1")
         {
             try
             {
@@ -49,7 +49,7 @@ namespace CommonTools.McsFile.Excel
                 NPOICreateTable(dt, strArry, sheet, style, 0);
 
                 // 将 Excel 文件保存到磁盘
-                NPOISaveFile(workbook, fileName);
+                NPOISaveFile(workbook, filePath);
 
                 // 释放资源
                 //workbook.Dispose();
@@ -69,11 +69,11 @@ namespace CommonTools.McsFile.Excel
         /// </summary>
         /// <param name="dt">数据源</param>
         /// <param name="strArry">拆分后列名</param>
-        /// <param name="fileName">绝对路径，路径+文件名+后缀</param>
+        /// <param name="filePath">绝对路径，路径+文件名+后缀</param>
         /// <param name="num">新一行索引，开始</param>
         /// <param name="workbook"></param>
         /// <param name="sheet"></param>
-        public static void Export(DataTable dt, string[] strArry, string fileName, int num, XSSFWorkbook workbook, ISheet sheet)
+        public static void Export(DataTable dt, string[] strArry, string filePath, int num, XSSFWorkbook workbook, ISheet sheet)
         {
             //设置单元格样式
             ICellStyle style = SetCellStyle(workbook);
@@ -82,7 +82,7 @@ namespace CommonTools.McsFile.Excel
             NPOICreateTable(dt, strArry, sheet, style, num);
 
             // 将 Excel 文件保存到磁盘
-            NPOISaveFile(workbook, fileName);
+            NPOISaveFile(workbook, filePath);
 
             // 释放资源
             //workbook.Dispose();
@@ -140,10 +140,10 @@ namespace CommonTools.McsFile.Excel
 
         #region 获取用户选择保存路径
 
-        /// <summary>
-        /// 获取让用户选择保存文件的绝对路径
-        /// </summary>
-        /// <returns></returns>
+        ///// <summary>
+        ///// 获取让用户选择保存文件的绝对路径
+        ///// </summary>
+        ///// <returns></returns>
         //public static string GetSaveFileRoute(string fileName, string filter = "Excel(*.xlsx)|*.xlsx", string initialDir = "")
         //{
         //    SaveFileDialog dialog = new SaveFileDialog();
@@ -177,12 +177,18 @@ namespace CommonTools.McsFile.Excel
 
         #region 保存文件
 
-        private static string NPOISaveFile(XSSFWorkbook workbook, string fileName)
+        /// <summary>
+        /// 保存Excel文件
+        /// </summary>
+        /// <param name="workbook">Excel对象</param>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        private static string NPOISaveFile(XSSFWorkbook workbook, string filePath)
         {
             try
             {
                 // 将 Excel 文件保存到磁盘
-                using (FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+                using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                 {
                     workbook.Write(fs);
                 }

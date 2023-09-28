@@ -21,6 +21,10 @@ namespace WpfNet6.ViewModel
         [ObservableProperty]
         private string? reciveMessage;
 
+        /// <summary>
+        /// 接收消息
+        /// </summary>
+        /// <param name="message"></param>
         public void Receive(ValueChangedMessage<string> message)
         {
             ReciveMessage = message.Value;
