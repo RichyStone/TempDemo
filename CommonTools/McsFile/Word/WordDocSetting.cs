@@ -1,37 +1,12 @@
-﻿using System;
+﻿using NPOI.XWPF.UserModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace CommonTools.McsFile.Word
 {
     /// <summary>
-    /// 设置文档
-    /// </summary>
-    public class WordDocSetting
-    {
-        /// <summary>
-        /// 文档类型，默认为A4纵向
-        /// </summary>
-        public PaperType PaperType { get; set; } = PaperType.A4_V;
-
-        /// <summary>
-        /// 保存地址，包含文件名
-        /// </summary>
-        public string SavePath { get; set; }
-
-        /// <summary>
-        /// 文档标题相关
-        /// </summary>
-        public ContentItemSetting TitleSetting { get; set; }
-
-        /// <summary>
-        /// 文档主要内容
-        /// </summary>
-        public ContentItemSetting MainContentSetting { get; set; }
-    }
-
-    /// <summary>
-    /// 文档内容相关
+    /// 段落设定
     /// </summary>
     public class ContentItemSetting
     {
@@ -59,6 +34,26 @@ namespace CommonTools.McsFile.Word
         /// 是否加粗，默认不加粗
         /// </summary>
         public bool HasBold { get; set; } = false;
+
+        /// <summary>
+        /// 是否倾斜，默认不倾斜
+        /// </summary>
+        public bool HasItalic { get; set; } = false;
+
+        /// <summary>
+        /// 字体颜色
+        /// </summary>
+        public string FontColor { get; set; }
+
+        /// <summary>
+        /// 对齐方式
+        /// </summary>
+        public ParagraphAlignment ParagraphAlignment { get; set; }
+
+        /// <summary>
+        /// 下划线
+        /// </summary>
+        public UnderlinePatterns UnderlinePatterns { get; set; }
     }
 
     /// <summary>

@@ -5,35 +5,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace CommonTools.McsFile.Word
 {
     public static class WordHelper
     {
-        public static void CreateNewDoc(string path)
-        {
-            XWPFDocument doc = new XWPFDocument();
-
-            XWPFParagraph p1 = doc.CreateParagraph();   //向新文档中添加段落
-            p1.Alignment = ParagraphAlignment.CENTER; //段落对其方式为居中
-
-            XWPFRun r1 = p1.CreateRun();                //向该段落中添加文字
-            r1.SetText("测试段落一");
-
-            XWPFParagraph p2 = doc.CreateParagraph();
-            p2.Alignment = ParagraphAlignment.LEFT;
-
-            XWPFRun r2 = p2.CreateRun();
-            r2.SetText("测试段落二");
-            r2.FontSize = 16;//设置字体大小
-            r2.IsBold = true;//设置粗体
-
-            using (FileStream sw = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write))
-            {
-                doc.Write(sw);
-                sw.Close();
-            }
-        }
+        /// <summary>
+        /// 文档内容
+        /// </summary>
+        public static LinkedList<XWPFParagraph> ParagraphItems { get; set; } = new LinkedList<XWPFParagraph>();
 
         public static void MainMethod(string directory, string fileName)
         {
@@ -49,39 +30,6 @@ namespace CommonTools.McsFile.Word
                 {
                     //创建document文档对象对象实例
                     XWPFDocument document = new XWPFDocument();
-
-                    #region 页脚
-
-                    document.Document.body.sectPr = new CT_SectPr();
-
-                    var with = document.Document.body.sectPr.pgSz.w;
-                    //设置为纵向
-                    document.Document.body.sectPr.pgSz.w = document.Document.body.sectPr.pgSz.h;
-                    document.Document.body.sectPr.pgSz.h = with;
-
-                    //页面边距
-                    document.Document.body.sectPr.pgMar.left = 800;//左边距
-                    document.Document.body.sectPr.pgMar.right = 800;//右边距
-                    document.Document.body.sectPr.pgMar.top = 850;//上边距
-                    document.Document.body.sectPr.pgMar.bottom = 850;//下边距
-
-                    CT_SectPr m_SectPr = document.Document.body.sectPr;
-                    //创建页脚
-                    CT_Ftr m_ftr = new CT_Ftr();
-
-                    m_ftr.AddNewP().AddNewR().AddNewT().Value = "Wuxi XDC ADC Contract Proposal";
-                    //创建页脚关系（footern.xml）
-                    XWPFRelation Frelation = XWPFRelation.FOOTER;
-                    XWPFFooter m_f = (XWPFFooter)document.CreateRelationship(Frelation, XWPFFactory.GetInstance(), document.FooterList.Count + 1);
-
-                    //设置页脚
-                    m_f.SetHeaderFooter(m_ftr);
-                    m_f.SetXWPFDocument(document);
-                    CT_HdrFtrRef m_HdrFtr1 = m_SectPr.AddNewFooterReference();
-                    m_HdrFtr1.type = ST_HdrFtr.@default;
-                    m_HdrFtr1.id = m_f.GetPackageRelationship().Id;
-
-                    #endregion 页脚
 
                     #region 头部
 
@@ -415,144 +363,46 @@ namespace CommonTools.McsFile.Word
             }
         }
 
-        /// <summary>
-        /// 读取word文档，并保存文件
-        /// </summary>
-        /// <param name="savePath"></param>
-        /// <returns></returns>
-        public static bool ReadWordFileAndSave<T>(out string savePath, T models)
+        private static void CreateFooter(XWPFDocument document)
         {
-            savePath = "";
+            document.Document.body.sectPr = new CT_SectPr();
 
-            string currentDate = DateTime.Now.ToString("yyyyMMdd");
-            string checkTime = DateTime.Now.ToString("yymmddss");//检查时间
-            var uploadPath = @"D:\MyCode\Aspose.Words\Files\";
-            var readPath = @"D:\MyCode\Aspose.Words\Files\Test.docx";
-            string workFileName = checkTime + "Test";
-            string fileName = string.Format("{0}.docx", workFileName, System.Text.Encoding.UTF8);
-            if (!Directory.Exists(uploadPath))
-            {
-                Directory.CreateDirectory(uploadPath);
-            }
-            using (var stream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create, FileAccess.Write))
-            {
-                FileStream fileStream = new FileStream(readPath, FileMode.Open, FileAccess.Read);
-                //读取document文档对象对象实例
-                XWPFDocument document = new XWPFDocument(fileStream);
-                //写入document文档对象对象实例
-                XWPFDocument newDocument = new XWPFDocument();
+            var width = document.Document.body.sectPr.pgSz.w;
+            //设置为纵向
+            document.Document.body.sectPr.pgSz.w = document.Document.body.sectPr.pgSz.h;
+            document.Document.body.sectPr.pgSz.h = width;
 
-                newDocument = document;
-                var counts = new ArrayList();
-                foreach (var para in document.Paragraphs)
-                {
-                    counts.Add(newDocument.GetPosOfParagraph(para));
-                }
-                foreach (var para in document.Tables)
-                {
-                    counts.Add(newDocument.GetPosOfTable(para));
-                }
-                foreach (var c in counts)
-                {
-                    newDocument.RemoveBodyElement((int)c);
-                }
-                var i = 0;
-                var ii = 0;
-                //遍历段落，替换内容
-                foreach (var para in document.Paragraphs)
-                {
-                    Type entityType = typeof(T);
-                    PropertyInfo[] properties = entityType.GetProperties();
-                    string paratext = para.ParagraphText;
-                    string text = paratext;
+            //页面边距
+            document.Document.body.sectPr.pgMar.left = 800;//左边距
+            document.Document.body.sectPr.pgMar.right = 800;//右边距
+            document.Document.body.sectPr.pgMar.top = 850;//上边距
+            document.Document.body.sectPr.pgMar.bottom = 850;//下边距
 
-                    if (!string.IsNullOrWhiteSpace(paratext))
-                    {
-                        foreach (var p in properties)
-                        {
-                            string propteryName = p.Name;//Word模板中设定的需要替换的标签
-                            object value = p.GetValue(models);
-                            if (value == null)
-                            {
-                                value = "";
-                            }
-                            if (text.Contains(propteryName))
-                            {
-                                text = text.Replace(propteryName, value.ToString());
-                            }
-                        }
-                    }
-                    if (paratext != text)
-                    {
-                        XWPFRun xwpfRunCopy = para.Runs[0];
-                        for (var i1 = para.Runs.Count - 1; i1 >= 0; i1--)
-                        {
-                            para.RemoveRun(i1);
-                        }
-                        XWPFRun xwpfRun = para.CreateRun();//创建段落文本对象
-                        xwpfRun = xwpfRunCopy;
-                        xwpfRun.SetText(text);//填充内容
-                    }
-                    var newpara = para;
-                    newDocument.SetParagraph(newpara, i);
-                    i += 1;
-                }
-                //遍历table，替换单元格内容
-                foreach (var table in document.Tables)
-                {
-                    foreach (var row in table.Rows)
-                    {
-                        foreach (var cell in row.GetTableCells())
-                        {
-                            foreach (var para in cell.Paragraphs)
-                            {
-                                Type entityType = typeof(T);
-                                PropertyInfo[] properties = entityType.GetProperties();
-                                string paratext = para.ParagraphText;
-                                string text = paratext;
+            CT_SectPr m_SectPr = document.Document.body.sectPr;
+            //创建页脚
+            CT_Ftr m_ftr = new CT_Ftr();
 
-                                if (!string.IsNullOrWhiteSpace(paratext))
-                                {
-                                    foreach (var p in properties)
-                                    {
-                                        string propteryName = p.Name;//Word模板中设定的需要替换的标签
-                                        object value = p.GetValue(models);
-                                        if (value == null)
-                                        {
-                                            value = "";
-                                        }
-                                        if (text.Contains(propteryName))
-                                        {
-                                            text = text.Replace(propteryName, value.ToString());
-                                        }
-                                    }
-                                }
-                                if (paratext != text)
-                                {
-                                    XWPFRun xwpfRunCopy = para.Runs[0];
-                                    for (var i1 = para.Runs.Count - 1; i1 >= 0; i1--)
-                                    {
-                                        para.RemoveRun(i1);
-                                    }
-                                    XWPFRun xwpfRun = para.CreateRun();//创建段落文本对象
-                                    xwpfRun = xwpfRunCopy;
-                                    xwpfRun.SetText(text);//填充内容
-                                }
-                            }
-                        }
-                    }
-                    newDocument.SetTable(ii, table);
-                    ii += 1;
-                }
+            m_ftr.AddNewP().AddNewR().AddNewT().Value = "Wuxi XDC ADC Contract Proposal";
+            //创建页脚关系（footern.xml）
+            XWPFRelation Frelation = XWPFRelation.FOOTER;
+            XWPFFooter m_f = (XWPFFooter)document.CreateRelationship(Frelation, XWPFFactory.GetInstance(), document.FooterList.Count + 1);
 
-                //向文档流中写入内容，生成word
-                newDocument.Write(stream);
-
-                savePath = "/SaveWordFile/" + currentDate + "/" + fileName;
-            }
-            return true;
+            //设置页脚
+            m_f.SetHeaderFooter(m_ftr);
+            m_f.SetXWPFDocument(document);
+            CT_HdrFtrRef m_HdrFtr1 = m_SectPr.AddNewFooterReference();
+            m_HdrFtr1.type = ST_HdrFtr.@default;
+            m_HdrFtr1.id = m_f.GetPackageRelationship().Id;
         }
 
+        /// <summary>
+        /// 插入图片
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="imgPath"></param>
+        /// <param name="pictureType"></param>
+        /// <param name="alignment"></param>
+        /// <returns></returns>
         public static XWPFParagraph ParagraphInsertImg(XWPFDocument document, string imgPath, PictureType pictureType = PictureType.JPEG, ParagraphAlignment alignment = ParagraphAlignment.CENTER)
         {
             XWPFParagraph paragraph = document.CreateParagraph();//创建段落对象
@@ -567,7 +417,7 @@ namespace CommonTools.McsFile.Word
         }
 
         /// <summary>
-        /// 创建word文档中的段落对象和设置段落文本的基本样式（字体大小，字体，字体颜色，字体对齐位置）
+        /// 创建word文档中的段落对象并设置段落文本的基本样式（字体大小，字体，字体颜色，字体对齐位置）
         /// </summary>
         /// <param name="document">document文档对象</param>
         /// <param name="fillContent">段落第一个文本对象填充的内容</param>
@@ -629,75 +479,36 @@ namespace CommonTools.McsFile.Word
         /// 创建文档
         /// </summary>
         /// <param name="setting"></param>
-        public static void ExportDocument(WordDocSetting setting)
+        public static void ExportDocument(string savePath, out string errorMsg, bool substitution = false, PaperType paperType = PaperType.A4_V)
         {
-            XWPFDocument docx = new XWPFDocument();
-            MemoryStream ms = new MemoryStream();
-
-            //设置文档
-            //docx.Document.body.sectPr = new CT_SectPr();
-            CT_SectPr setPr = docx.Document.body.sectPr = new CT_SectPr();
-            //获取页面大小
-            Tuple<int, int> size = GetPaperSize(setting.PaperType);
-            setPr.pgSz.w = (ulong)size.Item1;
-            setPr.pgSz.h = (ulong)size.Item2;
-
-            //创建一个段落
-            CT_P p = docx.Document.body.AddNewP();
-            //段落水平居中
-            p.AddNewPPr().AddNewJc().val = ST_Jc.center;
-            XWPFParagraph gp = new XWPFParagraph(p, docx);
-
-            XWPFRun gr = gp.CreateRun();
-            //创建标题
-            if (!string.IsNullOrEmpty(setting.TitleSetting.Title))
+            try
             {
-                gr.GetCTR().AddNewRPr().AddNewRFonts().ascii = setting.TitleSetting.FontName;
-                gr.GetCTR().AddNewRPr().AddNewRFonts().eastAsia = setting.TitleSetting.FontName;
-                gr.GetCTR().AddNewRPr().AddNewRFonts().hint = ST_Hint.eastAsia;
-                gr.GetCTR().AddNewRPr().AddNewSz().val = (ulong)setting.TitleSetting.FontSize;//2号字体
-                gr.GetCTR().AddNewRPr().AddNewSzCs().val = (ulong)setting.TitleSetting.FontSize;
-                gr.GetCTR().AddNewRPr().AddNewB().val = setting.TitleSetting.HasBold; //加粗
-                gr.GetCTR().AddNewRPr().AddNewColor().val = "black";//字体颜色
-                gr.SetText(setting.TitleSetting.Title);
-            }
+                errorMsg = string.Empty;
+                XWPFDocument docx = new XWPFDocument();
 
-            //创建文档主要内容
-            if (!string.IsNullOrEmpty(setting.MainContentSetting.MainContent))
-            {
-                p = docx.Document.body.AddNewP();
-                p.AddNewPPr().AddNewJc().val = ST_Jc.both;
-                gp = new XWPFParagraph(p, docx)
+                CT_SectPr setPr = docx.Document.body.sectPr = new CT_SectPr();
+                //获取页面大小
+                Tuple<int, int> size = GetPaperSize(paperType);
+                setPr.pgSz.w = (ulong)size.Item1;
+                setPr.pgSz.h = (ulong)size.Item2;
+
+                if (File.Exists(savePath) && !substitution)
                 {
-                    IndentationFirstLine = 2
-                };
+                    errorMsg = "给定路径已存在文件！";
+                    return;
+                }
 
-                //单倍为默认值（240）不需设置，1.5倍=240X1.5=360，2倍=240X2=480
-                p.AddNewPPr().AddNewSpacing().line = "400";//固定20磅
-                p.AddNewPPr().AddNewSpacing().lineRule = ST_LineSpacingRule.exact;
-
-                gr = gp.CreateRun();
-                CT_RPr rpr = gr.GetCTR().AddNewRPr();
-                CT_Fonts rfonts = rpr.AddNewRFonts();
-                rfonts.ascii = setting.MainContentSetting.FontName;
-                rfonts.eastAsia = setting.MainContentSetting.FontName;
-                rpr.AddNewSz().val = (ulong)setting.MainContentSetting.FontSize;//5号字体-21
-                rpr.AddNewSzCs().val = (ulong)setting.MainContentSetting.FontSize;
-                rpr.AddNewB().val = setting.MainContentSetting.HasBold;
-
-                gr.SetText(setting.MainContentSetting.MainContent);
+                using (FileStream fs = new FileStream(savePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write))
+                {
+                    //开始写入
+                    docx.Write(fs);
+                    fs.Close();
+                }
             }
-
-            //开始写入
-            docx.Write(ms);
-
-            using (FileStream fs = new FileStream(setting.SavePath, FileMode.Create, FileAccess.Write))
+            catch (Exception ex)
             {
-                byte[] data = ms.ToArray();
-                fs.Write(data, 0, data.Length);
-                fs.Flush();
+                errorMsg = ex.Message;
             }
-            ms.Close();
         }
 
         /// <summary>
