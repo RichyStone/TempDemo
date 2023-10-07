@@ -157,7 +157,7 @@
                     <TextBox Text="{Binding TestValidator, ValidatesOnNotifyDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
-                <TextBox Template="{DynamicResource TextBoxTemplate1}"
+                <TextBox
                     Grid.Row="5"
                     Margin="20"
                     Foreground="Red"
