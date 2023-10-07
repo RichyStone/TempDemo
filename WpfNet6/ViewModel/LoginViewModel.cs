@@ -14,7 +14,7 @@ using System.Windows;
 
 namespace WpfNet6.ViewModel
 {
-    public partial class LoginViewModel : ObservableValidator, IDataErrorInfo
+    public partial class LoginViewModel : ObservableValidator/*, IDataErrorInfo*/
     {
         public LoginViewModel()
         {
@@ -23,18 +23,25 @@ namespace WpfNet6.ViewModel
 
         private void LoginViewModel_ErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
         {
-            ValidateAllProperties();
+            try
+            {
+                errors = string.Join(Environment.NewLine, GetErrors().Where(err => !string.IsNullOrEmpty(err.ErrorMessage)));
+                OnPropertyChanged(nameof(Errors));
+            }
+            catch (Exception ex)
+            {
+                LogHelper.LogError("数据验证错误：", ex);
+            }
         }
 
         [ObservableProperty]
+        //[NotifyPropertyChangedFor(nameof(Error))]
         [NotifyPropertyChangedFor(nameof(TestNotify))]
-        [NotifyPropertyChangedFor(nameof(Error))]
         private string? userName;
 
         [ObservableProperty]
-        //[NotifyDataErrorInfo]
-        [NotifyPropertyChangedFor(nameof(Error))]
-        [Range(0, 800, ErrorMessage = "out of range")]
+        //[NotifyPropertyChangedFor(nameof(Error))]
+        [MinLength(2, ErrorMessage = "out of range")]
         private string? password;
 
         [ObservableProperty]
@@ -98,47 +105,63 @@ namespace WpfNet6.ViewModel
 
         private bool CanButtonClick => Enable;
 
-        public string Error
+        [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Range(0.1, 100, ErrorMessage = "Out of Range")]
+        private double testValidator;
+
+        private string errors;
+
+        public string Errors
         {
-            get
-            {
-                var list = new List<string>() {
-                    this[nameof(UserName)],
-                    this[nameof(Password)]
-                };
-
-                list.AddRange(GetErrors().Select(err =>
-                {
-                    if (!string.IsNullOrEmpty(err.ErrorMessage))
-                        return err.ErrorMessage;
-                    else
-                        return string.Empty;
-                }).Where(err => !string.IsNullOrWhiteSpace(err)));
-
-                return string.Join(Environment.NewLine, list.Where(str => !string.IsNullOrWhiteSpace(str)));
-            }
+            get => errors;
         }
 
-        public string this[string columnName]
-        {
-            get
-            {
-                if (columnName == nameof(UserName))
-                {
-                    if (string.IsNullOrWhiteSpace(UserName))
-                        return "UserName is required";
-                    if (UserName.Length < 3)
-                        return "Username must be at least 3 characters long";
-                }
-                else if (columnName == nameof(Password))
-                {
-                    if (string.IsNullOrWhiteSpace(Password))
-                        return "Password is required";
-                    if (Password.Length < 3)
-                        return "Password must be at least 3 characters long";
-                }
-                return string.Empty;
-            }
-        }
+        #region IDataErrorInfo
+
+        ////public string Errors
+        ////{
+        ////    get
+        ////    {
+        ////        var list = new List<string>() {
+        ////            this[nameof(UserName)],
+        ////            this[nameof(Password)]
+        ////        };
+
+        ////        list.AddRange(GetErrors().Select(err =>
+        ////        {
+        ////            if (!string.IsNullOrEmpty(err.ErrorMessage))
+        ////                return err.ErrorMessage;
+        ////            else
+        ////                return string.Empty;
+        ////        }).Where(err => !string.IsNullOrWhiteSpace(err)));
+
+        ////        return string.Join(Environment.NewLine, list.Where(str => !string.IsNullOrWhiteSpace(str)));
+        ////    }
+        ////}
+
+        ////public string this[string columnName]
+        ////{
+        ////    get
+        ////    {
+        ////        if (columnName == nameof(UserName))
+        ////        {
+        ////            if (string.IsNullOrWhiteSpace(UserName))
+        ////                return "UserName is required";
+        ////            if (UserName.Length < 3)
+        ////                return "Username must be at least 3 characters long";
+        ////        }
+        ////        else if (columnName == nameof(Password))
+        ////        {
+        ////            if (string.IsNullOrWhiteSpace(Password))
+        ////                return "Password is required";
+        ////            if (Password.Length < 3)
+        ////                return "Password must be at least 3 characters long";
+        ////        }
+        ////        return string.Empty;
+        ////    }
+        ////}
+
+        #endregion IDataErrorInfo
     }
 }

@@ -150,27 +150,18 @@
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
-                        <i:Interaction.Behaviors>
-                            <behavior:MouseWheelBehavior MaxValue="10.0" MinValue="1.0" Scale="0.2" />
-                        </i:Interaction.Behaviors>
                     </TextBox>
 
-                    <TextBox Text="{Binding Validation, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}">
-                        <i:Interaction.Behaviors>
-                            <behavior:MouseWheelBehavior
-                                DecimalPlace="0"
-                                MaxValue="100"
-                                MinValue="1"
-                                Scale="5" />
-                        </i:Interaction.Behaviors>
-                    </TextBox>
+                    <TextBox Text="{Binding Validation, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBox Text="{Binding TestValidator, ValidatesOnNotifyDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
-                <TextBox
+                <TextBox Template="{DynamicResource TextBoxTemplate1}"
                     Grid.Row="5"
                     Margin="20"
                     Foreground="Red"
-                    Text="{Binding Error, Mode=OneWay}" />
+                    Text="{Binding Errors, Mode=OneWay}" />
             </Grid>
         </Border>
     </Grid>
