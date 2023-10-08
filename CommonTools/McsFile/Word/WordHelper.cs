@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 
@@ -12,387 +13,142 @@ namespace CommonTools.McsFile.Word
     public static class WordHelper
     {
         /// <summary>
-        /// 文档内容
+        /// 段落设定字典
         /// </summary>
-        public static LinkedList<XWPFParagraph> ParagraphItems { get; set; } = new LinkedList<XWPFParagraph>();
+        private static Dictionary<string, ContentSetting> ContentSettings { get; set; }
 
-        public static void MainMethod(string directory, string fileName)
+        public static void TestMethod(string directory, string fileName)
         {
             try
             {
-                string currentDate = DateTime.Now.ToString("yyyyMMdd");
-                string checkTime = DateTime.Now.ToString("yymmddss");//检查时间
-
                 if (!Directory.Exists(directory))
                     Directory.CreateDirectory(directory);
+                AddContentSetting("tit", new ContentSetting { ParagraphAlignment = ParagraphAlignment.CENTER, FontSize = 30, HasBold = true });
+                AddContentSetting("text", new ContentSetting { ParagraphAlignment = ParagraphAlignment.LEFT, FontSize = 12 });
+                AddContentSetting("table", new ContentSetting { ParagraphAlignment = ParagraphAlignment.CENTER, FontSize = 12 });
+                AddContentSetting("underLine", new ContentSetting { ParagraphAlignment = ParagraphAlignment.CENTER, FontSize = 22, UnderlinePatterns = UnderlinePatterns.WavyHeavy });
 
-                using (var stream = new FileStream(Path.Combine(directory, $"{fileName}.docx"), FileMode.Create, FileAccess.Write))
+                //创建document文档对象对象实例
+                XWPFDocument document = new XWPFDocument();
+
+                #region 头部
+
+                //图片标题
+                //document.SetParagraph(ParagraphInsertImg(document, ""), 0);
+                ParagraphInstanceSetting(document, "标题", GetContentSetting("tit"));
+                ParagraphInstanceSetting(document, "第一段", GetContentSetting("text"));
+                ParagraphInstanceSetting(document, "第二段", GetContentSetting("text"));
+
+                var tableContent = new List<TableContent>();
+                for (int i = 0; i < 8; i++)
                 {
-                    //创建document文档对象对象实例
-                    XWPFDocument document = new XWPFDocument();
-
-                    #region 头部
-
-                    int pos = 0;
-                    //图片标题
-                    //document.SetParagraph(ParagraphInsertImg(document, ""), 0);
-
-                    //文本标题
-                    document.SetParagraph(ParagraphInstanceSetting(document, "", true, 18, "宋体", ParagraphAlignment.CENTER), pos++);
-                    //文本标题
-                    document.SetParagraph(ParagraphInstanceSetting(document, "", true, 18, "宋体", ParagraphAlignment.CENTER), pos++);
-                    //文本标题《项目编号》
-                    document.SetParagraph(ParagraphInstanceSetting(document, $"", true, 18, "宋体", ParagraphAlignment.CENTER), pos++);
-
-                    //创建文档中的表格对象实例
-                    XWPFTable firstXwpfTable = document.CreateTable(8, 3);//显示的行列数rows:8行,cols:3列
-                    firstXwpfTable.Width = 6000;//总宽度
-                    firstXwpfTable.SetColumnWidth(0, 2000); /* 设置列宽 */
-                    firstXwpfTable.SetColumnWidth(1, 2000); /* 设置列宽 */
-                    firstXwpfTable.SetColumnWidth(2, 2000); /* 设置列宽 */
-                    firstXwpfTable.SetTopBorder(XWPFTable.XWPFBorderType.NIL, 0, 0, "");
-                    firstXwpfTable.SetBottomBorder(XWPFTable.XWPFBorderType.NIL, 0, 0, "");
-                    firstXwpfTable.SetLeftBorder(XWPFTable.XWPFBorderType.NIL, 0, 0, "");
-                    firstXwpfTable.SetRightBorder(XWPFTable.XWPFBorderType.NIL, 0, 0, "");
-                    firstXwpfTable.SetInsideHBorder(XWPFTable.XWPFBorderType.NIL, 0, 0, "");
-                    firstXwpfTable.SetInsideVBorder(XWPFTable.XWPFBorderType.NIL, 0, 0, "");
-                    firstXwpfTable.SetCellMargins(0, 100, 0, 0);
-
-                    ////Table 表格第一行展示...后面的都是一样，只改变GetRow中的行数
-                    //firstXwpfTable.GetRow(0).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, "            ", ParagraphAlignment.RIGHT, 24, true, 10));
-                    //firstXwpfTable.GetRow(0).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, "委托方:", ParagraphAlignment.RIGHT, 24, true, 10));
-                    //firstXwpfTable.GetRow(0).GetCell(2).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, $"{"苏州光明生物制药有限公司"}", ParagraphAlignment.LEFT, 24, false));
-
-                    ////Table 表格第一行展示...后面的都是一样，只改变GetRow中的行数
-                    //firstXwpfTable.GetRow(1).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, "            ", ParagraphAlignment.RIGHT, 24, true, 10));
-                    //firstXwpfTable.GetRow(1).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, ":", ParagraphAlignment.RIGHT, 24, true, 10));
-                    //firstXwpfTable.GetRow(1).GetCell(2).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, $"", ParagraphAlignment.LEFT, 24, false));
-
-                    ////Table 表格第一行展示...后面的都是一样，只改变GetRow中的行数
-                    //firstXwpfTable.GetRow(2).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, "            ", ParagraphAlignment.RIGHT, 24, true, 10));
-                    //firstXwpfTable.GetRow(2).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, ":", ParagraphAlignment.RIGHT, 24, true, 10));
-                    //firstXwpfTable.GetRow(2).GetCell(2).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, $"", ParagraphAlignment.LEFT, 24, false));
-
-                    ////Table 表格第一行展示...后面的都是一样，只改变GetRow中的行数
-                    //firstXwpfTable.GetRow(3).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, "            ", ParagraphAlignment.RIGHT, 24, true, 10));
-                    //firstXwpfTable.GetRow(3).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, ":", ParagraphAlignment.RIGHT, 24, true, 10));
-                    //firstXwpfTable.GetRow(3).GetCell(2).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, $"{""}", ParagraphAlignment.LEFT, 24, false));
-
-                    ////Table 表格第一行展示...后面的都是一样，只改变GetRow中的行数
-                    //firstXwpfTable.GetRow(4).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, "            ", ParagraphAlignment.RIGHT, 24, true, 10));
-                    //firstXwpfTable.GetRow(4).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, ":", ParagraphAlignment.RIGHT, 24, true, 10));
-                    //firstXwpfTable.GetRow(4).GetCell(2).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, $"", ParagraphAlignment.LEFT, 24, false));
-
-                    ////Table 表格第一行展示...后面的都是一样，只改变GetRow中的行数
-                    //firstXwpfTable.GetRow(5).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, "            ", ParagraphAlignment.RIGHT, 24, true, 10));
-                    //firstXwpfTable.GetRow(5).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, ":", ParagraphAlignment.RIGHT, 24, true, 10));
-                    //firstXwpfTable.GetRow(5).GetCell(2).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, $"", ParagraphAlignment.LEFT, 24, false));
-
-                    ////Table 表格第一行展示...后面的都是一样，只改变GetRow中的行数
-                    //firstXwpfTable.GetRow(6).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, "            ", ParagraphAlignment.RIGHT, 24, true, 10));
-                    //firstXwpfTable.GetRow(6).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, ":", ParagraphAlignment.RIGHT, 24, true, 10));
-                    //firstXwpfTable.GetRow(6).GetCell(2).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, $"", ParagraphAlignment.LEFT, 24, false));
-
-                    ////Table 表格第一行展示...后面的都是一样，只改变GetRow中的行数
-                    //firstXwpfTable.GetRow(7).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, "            ", ParagraphAlignment.RIGHT, 24, true, 10));
-                    //firstXwpfTable.GetRow(7).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, ":", ParagraphAlignment.RIGHT, 24, true, 10));
-                    //firstXwpfTable.GetRow(7).GetCell(2).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, $"", ParagraphAlignment.LEFT, 24, false));
-
-                    #endregion 头部
-
-                    #region 内容
-
-                    //文本
-                    document.SetParagraph(ParagraphInstanceSetting(document, "xxxx.", false, 10, "宋体", ParagraphAlignment.LEFT), pos++);
-
-                    //下划线标题
-                    document.SetParagraph(ParagraphInstanceSetting(document, $"xxx", true, 12, "宋体", ParagraphAlignment.LEFT, UnderlinePatterns.None, "000000", false), pos++);
-
-                    //文本
-                    document.SetParagraph(ParagraphInstanceSetting(document, "xxxx", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-
-                    //文本
-                    document.SetParagraph(ParagraphInstanceSetting(document, @"xx", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-
-                    //下划线标题
-                    document.SetParagraph(ParagraphInstanceSetting(document, $"xx", true, 12, "宋体", ParagraphAlignment.LEFT, UnderlinePatterns.None, "000000", false), pos++);
-
-                    //文本
-                    document.SetParagraph(ParagraphInstanceSetting(document, @"xxx。", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-
-                    //下划线标题
-                    document.SetParagraph(ParagraphInstanceSetting(document, $"", true, 12, "宋体", ParagraphAlignment.LEFT, UnderlinePatterns.None, "000000", false), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, " ", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, "", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, " •    ", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, " •    ", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, " •    ", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, " •    ", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, " •    （包括液体和冻干制剂）", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-
-                    //下划线标题
-                    document.SetParagraph(ParagraphInstanceSetting(document, $"，", true, 12, "宋体", ParagraphAlignment.LEFT, UnderlinePatterns.None, "000000", false), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, $"", true, 12, "宋体", ParagraphAlignment.LEFT, UnderlinePatterns.None, "000000", false), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, @"", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-
-                    document.SetParagraph(ParagraphInstanceSetting(document, $"表格1", true, 12, "宋体", ParagraphAlignment.LEFT, UnderlinePatterns.None, "000000", false), pos++);
-
-                    #endregion 内容
-
-                    #region 文档第一个表格对象实例
-
-                    //创建文档中的表格对象实例
-                    XWPFTable firstXwpfTable1 = document.CreateTable(2, 3);//显示的行列数rows:3行,cols:4列
-                    firstXwpfTable1.Width = 3000;//总宽度
-                    firstXwpfTable1.SetColumnWidth(0, 1000); /* 设置列宽 */
-                    firstXwpfTable1.SetColumnWidth(1, 1000); /* 设置列宽 */
-
-                    //Table 表格第一行展示...后面的都是一样，只改变GetRow中的行数
-                    //firstXwpfTable1.GetRow(0).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable1, " ", ParagraphAlignment.CENTER, 24, true));
-                    //firstXwpfTable1.GetRow(0).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable1, "xxxx", ParagraphAlignment.CENTER, 24, false));
-                    //firstXwpfTable1.GetRow(0).GetCell(2).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable1, "xx", ParagraphAlignment.CENTER, 24, true));
-
-                    ////Table 表格第二行
-                    //firstXwpfTable1.GetRow(1).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable1, "xx", ParagraphAlignment.CENTER, 24, true));
-                    //firstXwpfTable1.GetRow(1).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable1, "xx", ParagraphAlignment.CENTER, 24, false));
-                    //firstXwpfTable1.GetRow(1).GetCell(2).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable1, "xx", ParagraphAlignment.CENTER, 24, true));
-
-                    //document.SetParagraph(ParagraphInstanceSetting(document, $"", true, 12, "宋体", ParagraphAlignment.LEFT, false, "", "000000", false, false), pos++);
-                    //document.SetParagraph(ParagraphInstanceSetting(document, $"", true, 12, "宋体", ParagraphAlignment.LEFT, false, "", "000000", false, false), pos++);
-                    //document.SetParagraph(ParagraphInstanceSetting(document, $"xx", false, 12, "宋体", ParagraphAlignment.LEFT, false, "", "000000", false, false), pos++);
-                    //document.SetParagraph(ParagraphInstanceSetting(document, $"", true, 12, "宋体", ParagraphAlignment.LEFT, false, "", "000000", false, false), pos++);
-
-                    document.SetParagraph(ParagraphInstanceSetting(document, " •    xxx", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, " •    x", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, " •    xx ", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, " •    xxx", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, " •    xxx", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, " •    x", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, " •    xx", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, " •    x", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-
-                    //document.SetParagraph(ParagraphInstanceSetting(document, $"", true, 12, "宋体", ParagraphAlignment.LEFT, false, "", "000000", false, false), pos++);
-
-                    //document.SetParagraph(ParagraphInstanceSetting(document, $"x", false, 12, "宋体", ParagraphAlignment.LEFT, false, "", "000000", false, false), pos++);
-
-                    //document.SetParagraph(ParagraphInstanceSetting(document, $"", true, 12, "宋体", ParagraphAlignment.LEFT, false, "", "000000", false, false), pos++);
-                    //document.SetParagraph(ParagraphInstanceSetting(document, $"", true, 12, "宋体", ParagraphAlignment.LEFT, false, "", "000000", false, false), pos++);
-                    //document.SetParagraph(ParagraphInstanceSetting(document, $"", true, 12, "宋体", ParagraphAlignment.LEFT, false, "", "000000", false, false), pos++);
-                    //document.SetParagraph(ParagraphInstanceSetting(document, $"", true, 12, "宋体", ParagraphAlignment.LEFT, false, "", "000000", false, false), pos++);
-
-                    //document.SetParagraph(ParagraphInstanceSetting(document, $"x", true, 12, "宋体", ParagraphAlignment.LEFT, false, "", "000000", false, true), pos++);
-                    //document.SetParagraph(ParagraphInstanceSetting(document, $" x", false, 12, "宋体", ParagraphAlignment.LEFT, false, "", "000000", false, false), pos++);
-                    //document.SetParagraph(ParagraphInstanceSetting(document, $"", true, 12, "宋体", ParagraphAlignment.LEFT, false, "", "000000", false, false), pos++);
-
-                    document.SetParagraph(ParagraphInstanceSetting(document, " •    x", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, " •    x", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-                    document.SetParagraph(ParagraphInstanceSetting(document, " ••••••", false, 12, "宋体", ParagraphAlignment.LEFT), pos++);
-
-                    //document.SetParagraph(ParagraphInstanceSetting(document, $"x", true, 12, "宋体", ParagraphAlignment.LEFT, false, "", "000000", false, false), pos++);
-                    //document.SetParagraph(ParagraphInstanceSetting(document, $"", true, 12, "宋体", ParagraphAlignment.LEFT, false, "", "000000", false, false), pos++);
-                    //document.SetParagraph(ParagraphInstanceSetting(document, $"", true, 12, "宋体", ParagraphAlignment.LEFT, false, "", "000000", false, false), pos++);
-
-                    //创建文档中的表格对象实例
-                    XWPFTable firstXwpfTable2 = document.CreateTable(4, 3);//显示的行列数rows:3行,cols:4列
-                    firstXwpfTable2.Width = 3000;//总宽度
-                    firstXwpfTable2.SetColumnWidth(0, 1000); /* 设置列宽 */
-                    firstXwpfTable2.SetColumnWidth(1, 1000); /* 设置列宽 */
-                    firstXwpfTable2.SetColumnWidth(2, 1000); /* 设置列宽 */
-
-                    #endregion 文档第一个表格对象实例
-
-                    var checkPeopleNum = 0;//检查人数
-                    var totalScore = 0;//总得分
-
-                    #region 文档第二个表格对象实例（遍历表格项）
-
-                    //创建文档中的表格对象实例
-                    XWPFTable secoedXwpfTable = document.CreateTable(5, 4);//显示的行列数rows:8行,cols:4列
-                    secoedXwpfTable.Width = 5200;//总宽度
-                    secoedXwpfTable.SetColumnWidth(0, 1300); /* 设置列宽 */
-                    secoedXwpfTable.SetColumnWidth(1, 1100); /* 设置列宽 */
-                    secoedXwpfTable.SetColumnWidth(2, 1400); /* 设置列宽 */
-                    secoedXwpfTable.SetColumnWidth(3, 1400); /* 设置列宽 */
-
-                    //遍历表格标题
-                    //secoedXwpfTable.GetRow(0).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, "员工姓名", ParagraphAlignment.CENTER, 24, true));
-                    //secoedXwpfTable.GetRow(0).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, "性别", ParagraphAlignment.CENTER, 24, true));
-                    //secoedXwpfTable.GetRow(0).GetCell(2).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, "年龄", ParagraphAlignment.CENTER, 24, true));
-                    //secoedXwpfTable.GetRow(0).GetCell(3).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, "综合评分", ParagraphAlignment.CENTER, 24, true));
-
-                    //遍历四条数据
-                    for (var i = 1; i < 5; i++)
+                    for (int j = 0; j < 8; j++)
                     {
-                        //secoedXwpfTable.GetRow(i).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, "小明" + i + "号", ParagraphAlignment.CENTER, 24, false));
-                        //secoedXwpfTable.GetRow(i).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, "男", ParagraphAlignment.CENTER, 24, false));
-                        //secoedXwpfTable.GetRow(i).GetCell(2).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, 20 + i + "岁", ParagraphAlignment.CENTER, 24, false));
-                        //secoedXwpfTable.GetRow(i).GetCell(3).SetParagraph(SetTableParagraphInstanceSetting(document, firstXwpfTable, 90 + i + "分", ParagraphAlignment.CENTER, 24, false));
-
-                        checkPeopleNum++;
-                        totalScore += 90 + i;
+                        tableContent.Add(new TableContent { RowIndex = i, ColumnIndex = j, TextValue = $"row:{i}  col:{j}", TextSetting = GetContentSetting("table") });
                     }
-
-                    #endregion 文档第二个表格对象实例（遍历表格项）
-
-                    #region 文档第三个表格对象实例
-
-                    //创建文档中的表格对象实例
-                    XWPFTable thirdXwpfTable = document.CreateTable(5, 4);//显示的行列数rows:5行,cols:4列
-                    thirdXwpfTable.Width = 5200;//总宽度
-                    thirdXwpfTable.SetColumnWidth(0, 1300); /* 设置列宽 */
-                    thirdXwpfTable.SetColumnWidth(1, 1100); /* 设置列宽 */
-                    thirdXwpfTable.SetColumnWidth(2, 1400); /* 设置列宽 */
-                    thirdXwpfTable.SetColumnWidth(3, 1400); /* 设置列宽 */
-                    //Table 表格第一行，后面的合并3列(注意关于表格中行合并问题，先合并，后填充内容)
-                    thirdXwpfTable.GetRow(0).MergeCells(0, 3);//从第一列起,合并3列
-
-                    //thirdXwpfTable.GetRow(0).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, thirdXwpfTable, "                                                                                         " + "检查内容: " +
-                    //    $"于{checkTime}下午检查了企业员工培训考核并对员工的相关信息进行了相关统计，统计结果如下：                                                                                                                                                                                                                " +
-                    //    "-------------------------------------------------------------------------------------" +
-                    //    $"共对该企业（{checkPeopleNum}）人进行了培训考核，培训考核总得分为（{totalScore}）分。 " + "", ParagraphAlignment.LEFT, 30, false));
-                    ////Table 表格第二行
-                    //thirdXwpfTable.GetRow(1).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, thirdXwpfTable, "检查结果: ", ParagraphAlignment.CENTER, 24, true));
-                    //thirdXwpfTable.GetRow(1).MergeCells(1, 3);//从第二列起，合并三列
-                    //thirdXwpfTable.GetRow(1).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, thirdXwpfTable, "该企业非常优秀，坚持每天学习打卡，具有蓬勃向上的活力。", ParagraphAlignment.LEFT, 24, false));
-
-                    ////Table 表格第三行
-                    //thirdXwpfTable.GetRow(2).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, thirdXwpfTable, "处理结果: ", ParagraphAlignment.CENTER, 24, true));
-                    //thirdXwpfTable.GetRow(2).MergeCells(1, 3);
-                    //thirdXwpfTable.GetRow(2).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, thirdXwpfTable, "通过检查，评分为优秀！", ParagraphAlignment.LEFT, 24, false));
-
-                    ////Table 表格第四行，后面的合并3列(注意关于表格中行合并问题，先合并，后填充内容),额外说明
-                    //thirdXwpfTable.GetRow(3).MergeCells(0, 3);//合并3列
-                    //thirdXwpfTable.GetRow(3).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, thirdXwpfTable, "备注说明: 记住，坚持就是胜利，永远保持一种求知，好问的心理！", ParagraphAlignment.LEFT, 24, false));
-
-                    ////Table 表格第五行
-                    //thirdXwpfTable.GetRow(4).MergeCells(0, 1);
-                    //thirdXwpfTable.GetRow(4).GetCell(0).SetParagraph(SetTableParagraphInstanceSetting(document, thirdXwpfTable, "                                                                                                                                                                                                 检查人员签名：              年 月 日", ParagraphAlignment.LEFT, 30, false));
-                    //thirdXwpfTable.GetRow(4).MergeCells(1, 2);
-
-                    //thirdXwpfTable.GetRow(4).GetCell(1).SetParagraph(SetTableParagraphInstanceSetting(document, thirdXwpfTable, "                                                                                                                                                                                                 企业法人签名：              年 月 日", ParagraphAlignment.LEFT, 30, false));
-
-                    //创建表格
-                    var col = 5;
-                    XWPFTable table = document.CreateTable(1, 5);//思路，数据一行一行画
-                    table.RemoveRow(0);//去掉第一行空白的
-                    table.Width = 1000 * 5;
-                    table.SetColumnWidth(0, 1000);/* 设置列宽 */
-                    table.SetColumnWidth(1, 1000);
-
-                    for (int i = 0; i < col - 3; i++)
-                    {
-                        table.SetColumnWidth(2 + i, 1000);/* 设置列宽 */
-                    }
-
-                    CT_Row nr = new CT_Row();
-                    XWPFTableRow mr = new XWPFTableRow(nr, table);//创建行
-                    table.AddRow(mr);//将行添加到table中
-
-                    XWPFTableCell c1 = mr.CreateCell();//创建单元格
-                    CT_Tc ct = c1.GetCTTc();
-                    CT_TcPr cp = ct.AddNewTcPr();
-
-                    //第1行
-                    cp.AddNewVMerge().val = ST_Merge.restart;//合并行
-                    cp.AddNewVAlign().val = ST_VerticalJc.center;//垂直
-                    ct.GetPList()[0].AddNewPPr().AddNewJc().val = ST_Jc.center;
-                    ct.GetPList()[0].AddNewR().AddNewT().Value = "序号";
-
-                    c1 = mr.CreateCell();//创建单元格
-                    ct = c1.GetCTTc();
-                    cp = ct.AddNewTcPr();
-
-                    cp.AddNewVMerge().val = ST_Merge.restart;//合并行
-                    cp.AddNewVAlign().val = ST_VerticalJc.center;//垂直
-                    ct.GetPList()[0].AddNewPPr().AddNewJc().val = ST_Jc.center;
-                    ct.GetPList()[0].AddNewR().AddNewT().Value = "指标名称";
-
-                    c1 = mr.CreateCell();//创建单元格
-                    ct = c1.GetCTTc();
-                    cp = ct.AddNewTcPr();
-                    cp.gridSpan = new CT_DecimalNumber();
-                    cp.gridSpan.val = Convert.ToString(col - 3); //合并列
-                    cp.AddNewVAlign().val = ST_VerticalJc.center;
-                    ct.GetPList()[0].AddNewPPr().AddNewJc().val = ST_Jc.center;//单元格内容居中显示
-                    ct.GetPList()[0].AddNewR().AddNewT().Value = "年龄段";
-
-                    c1 = mr.CreateCell();//创建单元格
-                    ct = c1.GetCTTc();
-                    cp = ct.AddNewTcPr();
-
-                    cp.AddNewVMerge().val = ST_Merge.restart;//合并行
-                    cp.AddNewVAlign().val = ST_VerticalJc.center;//垂直
-                    ct.GetPList()[0].AddNewPPr().AddNewJc().val = ST_Jc.center;
-                    ct.GetPList()[0].AddNewR().AddNewT().Value = "合计";
-                    //=====第一行表头结束=========
-
-                    //2行，多行合并类似
-                    nr = new CT_Row();
-                    mr = new XWPFTableRow(nr, table);
-                    table.AddRow(mr);
-
-                    c1 = mr.CreateCell();//创建单元格
-                    ct = c1.GetCTTc();
-                    cp = ct.AddNewTcPr();
-                    cp.AddNewVMerge().val = ST_Merge.@continue;//合并行 序号
-
-                    c1 = mr.CreateCell();//创建单元格
-                    ct = c1.GetCTTc();
-                    cp = ct.AddNewTcPr();
-                    cp.AddNewVMerge().val = ST_Merge.@continue;//合并行 指标名称
-                                                               //年龄段分组
-                                                               //["20岁以下","21-30","31-40","41-50","51-60","70岁以上"]
-                    var alAge = new List<string>() { "20岁以下", "21-30", "31-40", "41-50", "51-60", "70岁以上" };//年龄段数组
-                    for (int i = 0; i < alAge.Count; i++)
-                    {
-                        mr.CreateCell().SetText(Convert.ToString(alAge[i]));//年龄段单元格
-                    }
-                    c1 = mr.CreateCell();//创建单元格
-                    ct = c1.GetCTTc();
-                    cp = ct.AddNewTcPr();
-                    cp.AddNewVMerge().val = ST_Merge.@continue;//合并行 合计
-
-                    #endregion 文档第三个表格对象实例
-
-                    //向文档流中写入内容，生成word
-                    document.Write(stream);
                 }
+
+                var firTableSetting = new TableSetting() { Row = 6, Column = 3, ColWidthes = new List<ulong> { 2000, 2000, 2000 }, Width = 10000 };
+                var tt = GetTableTemplate(document, firTableSetting, tableContent);
+                tt.GetRow(0).MergeCells(0, 1);
+
+                #endregion 头部
+
+                #region 内容
+
+                ParagraphInstanceSetting(document, "xxxx.", GetContentSetting("underLine"));
+
+                ParagraphInstanceSetting(document, "xxx", GetContentSetting("text"));
+
+                //文本
+                ParagraphInstanceSetting(document, "xxxx", GetContentSetting("text"));
+
+                //文本
+                ParagraphInstanceSetting(document, @"xx", GetContentSetting("text"));
+
+                //下划线标题
+                ParagraphInstanceSetting(document, $"xx", GetContentSetting("underLine"));
+
+                //文本
+                ParagraphInstanceSetting(document, @"xxx。", GetContentSetting("text"));
+
+                //下划线标题
+                ParagraphInstanceSetting(document, " ", GetContentSetting("underLine"));
+                ParagraphInstanceSetting(document, "", GetContentSetting("underLine"));
+                ParagraphInstanceSetting(document, " •    ", GetContentSetting("underLine"));
+                ParagraphInstanceSetting(document, " •    ", GetContentSetting("underLine"));
+                ParagraphInstanceSetting(document, " •    ", GetContentSetting("underLine"));
+                ParagraphInstanceSetting(document, " •    ", GetContentSetting("underLine"));
+                ParagraphInstanceSetting(document, " •    （包括液体和冻干制剂）", GetContentSetting("underLine"));
+
+                //下划线标题
+                ParagraphInstanceSetting(document, @"", GetContentSetting("text"));
+
+                #endregion 内容
+
+                //创建文档中的表格对象实例
+                var sndTableSetting = new TableSetting() { Row = 6, Column = 6, ColWidthes = new List<ulong> { 2000, 2000, 2000 }, Width = 10000 };
+                GetTableTemplate(document, sndTableSetting, tableContent);
+
+                ParagraphInstanceSetting(document, " •    xxx", GetContentSetting("text"));
+                ParagraphInstanceSetting(document, " •    x", GetContentSetting("text"));
+                ParagraphInstanceSetting(document, " •    xx ", GetContentSetting("text"));
+                ParagraphInstanceSetting(document, " •    xxx", GetContentSetting("text"));
+                ParagraphInstanceSetting(document, " •    xxx", GetContentSetting("text"));
+                ParagraphInstanceSetting(document, " •    x", GetContentSetting("text"));
+                ParagraphInstanceSetting(document, " •    xx", GetContentSetting("text"));
+                ParagraphInstanceSetting(document, " •    x", GetContentSetting("text"));
+
+                ParagraphInstanceSetting(document, " •    x", GetContentSetting("text"));
+                ParagraphInstanceSetting(document, " •    x", GetContentSetting("text"));
+                ParagraphInstanceSetting(document, " ••••••", GetContentSetting("text"));
+
+                //创建文档中的表格对象实例
+                var thirdTableSetting = new TableSetting() { Row = 3, Column = 8, ColWidthes = new List<ulong> { 2000, 2000, 2000 }, Width = 10000 };
+                var dd = GetTableTemplate(document, thirdTableSetting, tableContent);
+                dd.GetRow(1).MergeCells(1, 2);
+
+                //向文档流中写入内容，生成word
+                var path = $"{Environment.CurrentDirectory}\\Test.docx";
+                ExportDocument(document, Path.Combine(directory, fileName), out string err, true);
             }
             catch (Exception ex)
             {
+                var ee = ex;
             }
         }
 
-        private static void CreateFooter(XWPFDocument document)
+        /// <summary>
+        /// 添加段落设定
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public static void AddContentSetting(string key, ContentSetting value)
         {
-            document.Document.body.sectPr = new CT_SectPr();
+            if (ContentSettings == null)
+                ContentSettings = new Dictionary<string, ContentSetting>();
 
-            var width = document.Document.body.sectPr.pgSz.w;
-            //设置为纵向
-            document.Document.body.sectPr.pgSz.w = document.Document.body.sectPr.pgSz.h;
-            document.Document.body.sectPr.pgSz.h = width;
+            if (ContentSettings.ContainsKey(key))
+                ContentSettings.Remove(key);
 
-            //页面边距
-            document.Document.body.sectPr.pgMar.left = 800;//左边距
-            document.Document.body.sectPr.pgMar.right = 800;//右边距
-            document.Document.body.sectPr.pgMar.top = 850;//上边距
-            document.Document.body.sectPr.pgMar.bottom = 850;//下边距
+            ContentSettings.Add(key, value);
+        }
 
-            CT_SectPr m_SectPr = document.Document.body.sectPr;
-            //创建页脚
-            CT_Ftr m_ftr = new CT_Ftr();
+        /// <summary>
+        /// 获取段落设定
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static ContentSetting GetContentSetting(string key)
+        {
+            if (ContentSettings == null)
+                throw new Exception("ContentSetting Dictionary is Null");
 
-            m_ftr.AddNewP().AddNewR().AddNewT().Value = "Wuxi XDC ADC Contract Proposal";
-            //创建页脚关系（footern.xml）
-            XWPFRelation Frelation = XWPFRelation.FOOTER;
-            XWPFFooter m_f = (XWPFFooter)document.CreateRelationship(Frelation, XWPFFactory.GetInstance(), document.FooterList.Count + 1);
-
-            //设置页脚
-            m_f.SetHeaderFooter(m_ftr);
-            m_f.SetXWPFDocument(document);
-            CT_HdrFtrRef m_HdrFtr1 = m_SectPr.AddNewFooterReference();
-            m_HdrFtr1.type = ST_HdrFtr.@default;
-            m_HdrFtr1.id = m_f.GetPackageRelationship().Id;
+            if (ContentSettings.ContainsKey(key))
+                return ContentSettings[key];
+            else
+                throw new Exception($"ContentSetting Dictionary doesn't Have Specified Key：{key}");
         }
 
         /// <summary>
@@ -413,6 +169,7 @@ namespace CommonTools.McsFile.Word
             FileStream gfs = new FileStream(imgPath, FileMode.Open, FileAccess.Read);
             xwpfRun.AddPicture(gfs, (int)pictureType, Path.GetFileName(imgPath), 330 * 9525, 100 * 9525);
             gfs.Close();
+
             return paragraph;
         }
 
@@ -428,21 +185,95 @@ namespace CommonTools.McsFile.Word
         /// <param name="fontColor">字体颜色--十六进制</param>
         /// <param name="isItalic">是否设置斜体（字体倾斜）</param>
         /// <returns></returns>
-        public static XWPFParagraph ParagraphInstanceSetting(XWPFDocument document, string fillContent, bool isBold, double fontSize, string fontFamily, ParagraphAlignment paragraphAlign, UnderlinePatterns underlinePatterns = UnderlinePatterns.None, string fontColor = "000000", bool isItalic = false)
+        public static XWPFParagraph ParagraphInstanceSetting(XWPFDocument document, string fillContent, ContentSetting contentItemSetting)
         {
             XWPFParagraph paragraph = document.CreateParagraph();//创建段落对象
-            paragraph.Alignment = paragraphAlign;//文字显示位置,段落排列（左对齐，居中，右对齐）
+            paragraph.Alignment = contentItemSetting.ParagraphAlignment;//文字显示位置,段落排列（左对齐，居中，右对齐）
 
             XWPFRun xwpfRun = paragraph.CreateRun();//创建段落文本对象
-            xwpfRun.IsBold = isBold;//文字加粗
+            xwpfRun.IsBold = contentItemSetting.HasBold;//文字加粗
             xwpfRun.SetText(fillContent);//填充内容
-            xwpfRun.FontSize = fontSize;//设置文字大小
-            xwpfRun.IsItalic = isItalic;//是否设置斜体（字体倾斜）
-            xwpfRun.SetColor(fontColor);//设置字体颜色--十六进制
-            xwpfRun.SetFontFamily(fontFamily, FontCharRange.None); //设置标题样式如：（微软雅黑，隶书，楷体）根据自己的需求而定
-            xwpfRun.Underline = underlinePatterns;
+            xwpfRun.FontSize = contentItemSetting.FontSize;//设置文字大小
+            xwpfRun.IsItalic = contentItemSetting.HasItalic;//是否设置斜体（字体倾斜）
+            xwpfRun.SetColor(contentItemSetting.FontColor);//设置字体颜色--十六进制
+            xwpfRun.SetFontFamily(contentItemSetting.FontFamily, FontCharRange.None); //设置标题样式如：（微软雅黑，隶书，楷体）根据自己的需求而定
+            xwpfRun.Underline = contentItemSetting.UnderlinePatterns;
 
             return paragraph;
+        }
+
+        /// <summary>
+        /// 获取一个表格基础模板
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="tableSetting"></param>
+        /// <param name="tableContents"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static XWPFTable GetTableTemplate(XWPFDocument document, TableSetting tableSetting, List<TableContent> tableContents)
+        {
+            if (tableSetting.Row == 0 || tableSetting.Column == 0)
+                throw new Exception("表格的行或列不可设定为0！");
+            XWPFTable table = document.CreateTable(tableSetting.Row, tableSetting.Column);//显示的行列数rows:8行,cols:3列
+
+            if (tableSetting.Width > 0)
+                table.Width = tableSetting.Width;//总宽度
+
+            if (tableSetting.ColWidthes.Count > 0)
+                for (int i = 0; i < tableSetting.Column; i++)
+                {
+                    if (i < tableSetting.ColWidthes.Count)
+                        table.SetColumnWidth(i, tableSetting.ColWidthes[i]); /* 设置列宽 */
+                    else
+                        table.SetColumnWidth(i, 2000); /* 设置列宽 */
+                }
+
+            if (tableSetting.Borders != null && tableSetting.Borders.Count > 0)
+                foreach (var item in tableSetting.Borders)
+                {
+                    switch (item.Position)
+                    {
+                        case BorderPosition.Top:
+                            table.SetTopBorder(item.BorderType, item.Size, item.Space, item.Rgb);
+                            break;
+
+                        case BorderPosition.Bot:
+                            table.SetBottomBorder(item.BorderType, item.Size, item.Space, item.Rgb);
+                            break;
+
+                        case BorderPosition.Left:
+                            table.SetLeftBorder(item.BorderType, item.Size, item.Space, item.Rgb);
+                            break;
+
+                        case BorderPosition.Right:
+                            table.SetRightBorder(item.BorderType, item.Size, item.Space, item.Rgb);
+                            break;
+
+                        case BorderPosition.InsideH:
+                            table.SetInsideHBorder(item.BorderType, item.Size, item.Space, item.Rgb);
+                            break;
+
+                        case BorderPosition.InsideV:
+                            table.SetInsideVBorder(item.BorderType, item.Size, item.Space, item.Rgb);
+                            break;
+                    }
+                }
+
+            table.SetCellMargins(tableSetting.TopCellMargin, tableSetting.LeftCellMargin, tableSetting.BotCellMargin, tableSetting.RightCellMargin);
+
+            for (int i = 0; i < tableSetting.Row; i++)
+            {
+                for (int j = 0; j < tableSetting.Column; j++)
+                {
+                    if (tableContents.Any(con => con.RowIndex == i && con.ColumnIndex == j))
+                    {
+                        var content = tableContents.First(con => con.RowIndex == i && con.ColumnIndex == j);
+                        table.GetRow(i).GetCell(j).SetParagraph(SetTableParagraphInstanceSetting(table, content.TextValue, content.TextSetting));
+                    }
+                }
+            }
+
+            return table;
         }
 
         /// <summary>
@@ -456,22 +287,23 @@ namespace CommonTools.McsFile.Word
         /// <param name="fontColor">字体颜色--十六进制</param>
         /// <param name="isItalic">是否设置斜体（字体倾斜）</param>
         /// <returns></returns>
-        public static XWPFParagraph SetTableParagraphInstanceSetting(XWPFTable table, string fillContent, ParagraphAlignment paragraphAlign, bool isBold = false, double fontSize = 10, string fontColor = "000000", bool isItalic = false)
+        public static XWPFParagraph SetTableParagraphInstanceSetting(XWPFTable table, string fillContent, ContentSetting contentItemSetting)
         {
             var para = new CT_P();
             //设置单元格文本对齐
             para.AddNewPPr().AddNewTextAlignment();
 
             XWPFParagraph paragraph = new XWPFParagraph(para, table.Body);//创建表格中的段落对象
-            paragraph.Alignment = paragraphAlign;//文字显示位置,段落排列（左对齐，居中，右对齐）
+            paragraph.Alignment = contentItemSetting.ParagraphAlignment;//文字显示位置,段落排列（左对齐，居中，右对齐）
 
             XWPFRun xwpfRun = paragraph.CreateRun();//创建段落文本对象
             xwpfRun.SetText(fillContent);
-            xwpfRun.FontSize = fontSize;//字体大小
-            xwpfRun.SetColor(fontColor);//设置字体颜色--十六进制
-            xwpfRun.IsItalic = isItalic;//是否设置斜体（字体倾斜）
-            xwpfRun.IsBold = isBold;//是否加粗
-            xwpfRun.SetFontFamily("宋体", FontCharRange.None);//设置字体（如：微软雅黑,华文楷体,宋体）
+            xwpfRun.FontSize = contentItemSetting.FontSize;//字体大小
+            xwpfRun.SetColor(contentItemSetting.FontColor);//设置字体颜色--十六进制
+            xwpfRun.IsItalic = contentItemSetting.HasItalic;//是否设置斜体（字体倾斜）
+            xwpfRun.IsBold = contentItemSetting.HasBold;//是否加粗
+            xwpfRun.SetFontFamily(contentItemSetting.FontFamily, FontCharRange.None);//设置字体（如：微软雅黑,华文楷体,宋体）
+
             return paragraph;
         }
 
@@ -479,24 +311,25 @@ namespace CommonTools.McsFile.Word
         /// 创建文档
         /// </summary>
         /// <param name="setting"></param>
-        public static void ExportDocument(string savePath, out string errorMsg, bool substitution = false, PaperType paperType = PaperType.A4_V)
+        public static void ExportDocument(XWPFDocument docx, string savePath, out string errorMsg, bool substitution = false)
         {
             try
             {
                 errorMsg = string.Empty;
-                XWPFDocument docx = new XWPFDocument();
 
-                CT_SectPr setPr = docx.Document.body.sectPr = new CT_SectPr();
-                //获取页面大小
-                Tuple<int, int> size = GetPaperSize(paperType);
-                setPr.pgSz.w = (ulong)size.Item1;
-                setPr.pgSz.h = (ulong)size.Item2;
+                ////CT_SectPr setPr = docx.Document.body.sectPr = new CT_SectPr();
+                //////获取页面大小
+                ////Tuple<int, int> size = GetPaperSize(paperType);
+                ////setPr.pgSz.w = (ulong)size.Item1;
+                ////setPr.pgSz.h = (ulong)size.Item2;
 
                 if (File.Exists(savePath) && !substitution)
                 {
                     errorMsg = "给定路径已存在文件！";
                     return;
                 }
+                else if (File.Exists(savePath) && substitution)
+                    File.Delete(savePath);
 
                 using (FileStream fs = new FileStream(savePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write))
                 {

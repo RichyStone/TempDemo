@@ -1,4 +1,5 @@
 ﻿using CommonTools.Log;
+using CommonTools.McsFile.Word;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -101,6 +102,8 @@ namespace WpfNet6.ViewModel
             var reply = WeakReferenceMessenger.Default.Send(new RequestMessage<string>());
 
             var res = reply.Response;
+
+            WordHelper.TestMethod($"{Environment.CurrentDirectory}", "Test.docx");
         }
 
         private bool CanButtonClick => Enable;

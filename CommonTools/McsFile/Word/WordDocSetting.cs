@@ -1,34 +1,26 @@
 ﻿using NPOI.XWPF.UserModel;
 using System;
 using System.Collections.Generic;
+using System.Security.Policy;
 using System.Text;
+using static NPOI.XWPF.UserModel.XWPFTable;
 
 namespace CommonTools.McsFile.Word
 {
     /// <summary>
     /// 段落设定
     /// </summary>
-    public class ContentItemSetting
+    public class ContentSetting
     {
-        /// <summary>
-        /// 标题
-        /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
-        /// 主要内容
-        /// </summary>
-        public string MainContent { get; set; }
-
         /// <summary>
         /// 使用字体
         /// </summary>
-        public string FontName { get; set; } = "宋体";
+        public string FontFamily { get; set; } = "宋体";
 
         /// <summary>
-        /// 字体大小，默认2号字体
+        /// 字体大小
         /// </summary>
-        public int FontSize { get; set; } = 44;
+        public int FontSize { get; set; } = 12;
 
         /// <summary>
         /// 是否加粗，默认不加粗
@@ -43,17 +35,72 @@ namespace CommonTools.McsFile.Word
         /// <summary>
         /// 字体颜色
         /// </summary>
-        public string FontColor { get; set; }
+        public string FontColor { get; set; } = "000000";
 
         /// <summary>
         /// 对齐方式
         /// </summary>
-        public ParagraphAlignment ParagraphAlignment { get; set; }
+        public ParagraphAlignment ParagraphAlignment { get; set; } = ParagraphAlignment.LEFT;
 
         /// <summary>
         /// 下划线
         /// </summary>
-        public UnderlinePatterns UnderlinePatterns { get; set; }
+        public UnderlinePatterns UnderlinePatterns { get; set; } = UnderlinePatterns.None;
+    }
+
+    public class TableSetting
+    {
+        public int Width { get; set; }
+
+        public int Row { get; set; }
+
+        public int Column { get; set; }
+
+        public List<ulong> ColWidthes { get; set; }
+
+        public List<TableBorder> Borders { get; set; }
+
+        public int TopCellMargin { get; set; }
+
+        public int BotCellMargin { get; set; }
+
+        public int LeftCellMargin { get; set; }
+
+        public int RightCellMargin { get; set; }
+    }
+
+    public class TableBorder
+    {
+        public BorderPosition Position { get; set; }
+
+        public XWPFTable.XWPFBorderType BorderType { get; set; } = XWPFTable.XWPFBorderType.NIL;
+
+        public int Size { get; set; }
+
+        public int Space { get; set; }
+
+        public string Rgb { get; set; }
+    }
+
+    public class TableContent
+    {
+        public int RowIndex { get; set; }
+
+        public int ColumnIndex { get; set; }
+
+        public string TextValue { get; set; }
+
+        public ContentSetting TextSetting { get; set; } = new ContentSetting();
+    }
+
+    public enum BorderPosition
+    {
+        Top,
+        Bot,
+        Left,
+        Right,
+        InsideH,
+        InsideV
     }
 
     /// <summary>
