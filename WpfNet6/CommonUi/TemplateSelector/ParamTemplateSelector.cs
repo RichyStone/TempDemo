@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace WpfNet6.CommonUi.TemplateSelector
+namespace FwmTestHelper.CommonUIAssistant.TemplateSelector
 {
     public class ParamTemplateSelector : DataTemplateSelector
     {
@@ -11,6 +11,14 @@ namespace WpfNet6.CommonUi.TemplateSelector
             if (container is not FrameworkElement element || item == null) return template;
 
             return template ?? new DataTemplate();
+        }
+
+        private DataTemplate GetCorrectTemplate(FrameworkElement element, string key)
+        {
+            if (element.FindResource(key) is DataTemplate template)
+                return template;
+            else
+                return new DataTemplate();
         }
     }
 }
