@@ -64,14 +64,14 @@ namespace CommonTools.Log
         /// 普通信息
         /// </summary>
         /// <param name="info"></param>
-        public static void LogInfo(string info)
+        public static void LogInfo(string message)
         {
             if (!initFlag)
                 LogInit();
 
             if (loginfo.IsInfoEnabled)
             {
-                loginfo.Info(info);
+                loginfo.Info(message);
             }
         }
 
@@ -79,14 +79,14 @@ namespace CommonTools.Log
         /// 调试信息
         /// </summary>
         /// <param name="info"></param>
-        public static void LogDebug(string info)
+        public static void LogDebug(string message)
         {
             if (!initFlag)
                 LogInit();
 
             if (loginfo.IsDebugEnabled)
             {
-                loginfo.Debug(info);
+                loginfo.Debug(message);
             }
         }
 
@@ -94,14 +94,14 @@ namespace CommonTools.Log
         /// 错误信息
         /// </summary>
         /// <param name="error"></param>
-        public static void LogError(string error)
+        public static void LogError(string message)
         {
             if (!initFlag)
                 LogInit();
 
             if (logerror.IsErrorEnabled)
             {
-                logerror.Error(error);
+                logerror.Error(message);
             }
         }
 
@@ -110,15 +110,15 @@ namespace CommonTools.Log
         /// </summary>
         /// <param name="info"></param>
         /// <param name="ex"></param>
-        public static void LogError(string info, Exception ex)
+        public static void LogError(string message, Exception ex)
         {
             if (!initFlag)
                 LogInit();
 
-            Console.WriteLine(info);
+            Console.WriteLine(message);
             if (logerror.IsErrorEnabled)
             {
-                logerror.Error(info, ex);
+                logerror.Error(message, ex);
             }
         }
     }
