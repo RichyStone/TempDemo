@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace FwmTestHelper.CommonUIAssistant.TemplateSelector
+namespace WpfNet6.CommonUi.TemplateSelector
 {
     public class ParamTemplateSelector : DataTemplateSelector
     {

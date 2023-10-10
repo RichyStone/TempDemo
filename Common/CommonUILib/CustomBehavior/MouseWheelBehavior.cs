@@ -1,12 +1,7 @@
 ﻿using Microsoft.Xaml.Behaviors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace WpfNet6.CommonUi.Behavior
+namespace Common.CommonUILib.CustomBehavior
 {
     public class MouseWheelBehavior : Behavior<TextBox>
     {

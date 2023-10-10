@@ -1,17 +1,11 @@
 ﻿using Microsoft.Xaml.Behaviors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace WpfNet6.CommonUi.Behavior
+namespace Common.CommonUILib.CustomBehavior
 {
     public class ClearTxtBehavior : Behavior<Button>
     {
-
         public TextBox Target
         {
             get { return (TextBox)GetValue(TargetProperty); }
@@ -37,6 +31,5 @@ namespace WpfNet6.CommonUi.Behavior
         {
             Target?.Clear();
         }
-
     }
 }

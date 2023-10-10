@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FwmTestHelper.CommonUIAssistant.MessagerTools
+namespace WpfNet6.CommonUi.MessagerTools
 {
     public class MessagerTransData
     {

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
-namespace WpfNet6.CommonUi.BindingProxy
+namespace Common.CommonUILib.BindingProxy
 {
-    internal class BindingProxy : Freezable
+    public class BindingProxy : Freezable
     {
         protected override Freezable CreateInstanceCore() => new BindingProxy();
 
@@ -19,8 +14,5 @@ namespace WpfNet6.CommonUi.BindingProxy
 
         public static readonly DependencyProperty DataProperty =
             DependencyProperty.Register(nameof(Data), typeof(object), typeof(BindingProxy));
-
-
-
     }
 }
