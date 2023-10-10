@@ -42,11 +42,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CommonTools\CommonTools.csproj" />
-    <ProjectReference Include="..\CommonUILib\CommonUILib.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="GlobalFunction\" />
   </ItemGroup>
 
