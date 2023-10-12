@@ -13,14 +13,14 @@ namespace Common.CommonTools.Serialize
         /// <param name="obj">对象</param>
         /// <param name="filePath">文件地址</param>
         /// <param name="extension">文件后缀名，默认为.xml</param>
-        /// <returns>错误信息，没有错误则为空</returns>
-        public static string WriteFile<TObject>(TObject obj, string filePath, string extension = ".xml")
+        /// <returns>序列化是否成功</returns>
+        public static bool WriteFile<TObject>(TObject obj, string filePath, string extension = ".xml")
             where TObject : class
         {
             try
             {
                 if (obj == null)
-                    return "对象参数为null";
+                    throw new ArgumentNullException(nameof(obj));
 
                 var dir = Path.GetDirectoryName(filePath);
                 if (!Directory.Exists(dir))
@@ -32,11 +32,11 @@ namespace Common.CommonTools.Serialize
                 using (Stream stream = new FileStream(path, FileMode.OpenOrCreate))
                     serializer.Serialize(stream, obj);
 
-                return string.Empty;
+                return true;
             }
-            catch (Exception ex)
+            catch
             {
-                return ex.Message;
+                throw;
             }
         }
 
@@ -45,14 +45,13 @@ namespace Common.CommonTools.Serialize
         /// </summary>
         /// <typeparam name="TObject"></typeparam>
         /// <param name="filePath">文件地址</param>
+        /// <param name="obj">反序列化得到的对象</param>
         /// <param name="extension">文件后缀名</param>
-        /// <param name="errorMsg">错误信息</param>
-        /// <returns>反序列化得到的对象</returns>
-        public static TObject ReadFile<TObject>(string filePath, string extension, out string errorMsg)
+        /// <returns>反序列化是否成功</returns>
+        public static bool ReadFile<TObject>(string filePath, out TObject obj, string extension = ".xml")
             where TObject : class
         {
-            TObject t = null;
-            errorMsg = string.Empty;
+            obj = null;
 
             try
             {
@@ -64,22 +63,21 @@ namespace Common.CommonTools.Serialize
 
                     using (Stream stream = new FileStream(path, FileMode.Open))
                     {
-                        var obj = serializer.Deserialize(stream);
-                        t = obj as TObject;
+                        var ret = serializer.Deserialize(stream);
+                        if (ret is TObject)
+                            obj = ret as TObject;
+                        else
+                            throw new Exception("反序列化失败");
                     }
                 }
                 else
-                    errorMsg = "文件路径不存在";
+                    throw new Exception($"文件路径不存在:{path}");
 
-                if (t == null)
-                    errorMsg = "反序列化失败";
-
-                return t;
+                return true;
             }
-            catch (Exception ex)
+            catch
             {
-                errorMsg = ex.ToString();
-                return t;
+                throw;
             }
         }
     }
