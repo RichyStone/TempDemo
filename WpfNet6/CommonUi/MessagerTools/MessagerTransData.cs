@@ -4,21 +4,21 @@ namespace WpfNet6.CommonUi.MessagerTools
 {
     public class MessagerTransData
     {
-        public string CommondMes { get; set; }
+        public object? Data { get; set; }
 
-        public int Index { get; set; }
+        public bool BoolValue { get; set; }
 
-        public object Data { get; set; }
+        public int IntValue { get; set; }
+
+        public string? StrValue { get; set; }
     }
 
+    /// <summary>
+    /// Messager消息传输对象
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class MessagerTransData<T>
     {
-        public string CommondMes { get; set; }
-
-        public int Index { get; set; }
-
-        public object Data { get; set; }
-
-        public List<T> List { get; set; }
+        public T? Value { get; set; }
     }
 }
