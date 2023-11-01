@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<AssemblyVersion>2.3.3.23285</AssemblyVersion>
-		<FileVersion>2.3.8685.8</FileVersion>
+		<FileVersion>2.3.23305.8</FileVersion>
 		<AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
 		<Version>$(AssemblyVersion)</Version>
 		<Authors>shijiafu</Authors>
