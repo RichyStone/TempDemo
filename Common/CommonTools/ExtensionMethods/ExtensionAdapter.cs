@@ -10,13 +10,13 @@ namespace Common.CommonTools.ExtensionMethods
         public static bool JudgeTimeOut(this Task task, int TimeOout)
         {
             var completed = Task.WhenAny(task, Task.Delay(TimeOout));
-            return completed == task;
+            return completed.Result == task;
         }
 
         public static bool JudgeTimeOut(this Task task, TimeSpan TimeOout)
         {
             var completed = Task.WhenAny(task, Task.Delay(TimeOout));
-            return completed == task;
+            return completed.Result == task;
         }
     }
 }

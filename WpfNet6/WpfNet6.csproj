@@ -5,7 +5,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <FileVersion>1.0.23305.3</FileVersion>
+    <FileVersion>1.0.23306.3</FileVersion>
     <AssemblyVersion>1.0.1.23283</AssemblyVersion>
   </PropertyGroup>
 
@@ -25,12 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\CommonTools\CommonTools.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="CommonUILib">
-      <HintPath>Libs\CommonUILib.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Common\CommonUILib\CommonUILib.csproj" />
   </ItemGroup>
 
 </Project>
