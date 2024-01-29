@@ -1,6 +1,5 @@
 ﻿using Common.CommonTools.Log;
 using System;
-using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -16,14 +15,6 @@ namespace WpfNet6
         public App()
         {
             InitializeComponent();
-
-            var mutex = new Mutex(false, "wpfDemoMutex", out bool createNew);
-            if (!createNew)
-            {
-                MessageBox.Show("Already Exist!");
-                return;
-                //Application.Current.Shutdown();
-            }
 
             UIDispatcher = Application.Current.Dispatcher;
             this.DispatcherUnhandledException += CatchUIUnhandledException;
