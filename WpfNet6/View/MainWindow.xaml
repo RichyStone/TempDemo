@@ -36,11 +36,11 @@
             Columns="3"
             FirstColumn="1"
             Rows="3">
-            <TextBlock Text="{Binding ReciveMessage}" />
+            <TextBlock d:Text="DesginTime" Text="{Binding ReciveMessage, FallbackValue=ss}" />
             <TextBlock Text="{Binding Source={StaticResource BindingProxy}, Path=Data.Name}" />
-            <TextBlock Text="Test" />
-            <TextBlock Text="Test" />
-            <TextBlock Text="Test" />
+            <TextBlock Text="{Binding Test, FallbackValue=FallBack}" />
+            <TextBlock Text="{Binding Test, TargetNullValue=TargetNull}" />
+            <TextBlock d:Text="DesginTime" Text="Test" />
             <TextBlock Text="Test" />
             <TextBlock Text="Test" />
             <cus:CustomTextBox IsHighLighted="True" />

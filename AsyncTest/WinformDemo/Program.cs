@@ -12,6 +12,14 @@ namespace WinformDemo
         [STAThread]
         private static void Main()
         {
+            var mutex = new Mutex(false, "TempDemoMutex", out bool createdNew);
+            if (!createdNew)
+            {
+                MessageBox.Show("已有正在运行的进程！");
+                return;
+                //Environment.Exit(1);
+            }
+
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             Application.ThreadException += UIThreadException;
             AppDomain.CurrentDomain.UnhandledException += HandleException;
@@ -29,7 +37,7 @@ namespace WinformDemo
         private static void HandleException(object sender, UnhandledExceptionEventArgs e)
         {
             //if (e.ExceptionObject is Exception error)
-                //LogHelper.LogError($"非UI线程未处理异常:{error.Message}\n{error.StackTrace}");
+            //LogHelper.LogError($"非UI线程未处理异常:{error.Message}\n{error.StackTrace}");
         }
     }
 }

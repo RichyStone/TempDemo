@@ -1,7 +1,10 @@
 ﻿using Common.CommonTools.Log;
 using System;
+using System.Diagnostics;
+using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
+using WpfNet6.ViewModel;
 
 namespace WpfNet6
 {
@@ -14,8 +17,6 @@ namespace WpfNet6
 
         public App()
         {
-            InitializeComponent();
-
             UIDispatcher = Application.Current.Dispatcher;
             this.DispatcherUnhandledException += CatchUIUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CatchUnhandledException;
@@ -30,6 +31,17 @@ namespace WpfNet6
         {
             if (e.ExceptionObject is Exception ex)
                 LogHelper.LogError($"非UI线程未处理异常：{ex.Message}\n{ex.StackTrace}");
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            Process p = Process.GetCurrentProcess();
+            Mutex mutex = new Mutex(true, p.ProcessName, out bool createNew);
+            if (!createNew)
+            {
+                MessageBox.Show("Application is already run!");
+                this.Shutdown();
+            }
         }
     }
 }

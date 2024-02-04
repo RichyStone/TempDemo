@@ -11,14 +11,6 @@ namespace WpfNet6.View
         public MainWindow()
         {
             InitializeComponent();
-
-            var mutex = new Mutex(false, "wpfDemoMutex", out bool createNew);
-            if (!createNew)
-            {
-                MessageBox.Show("Already Exist!");
-                Application.Current.Shutdown();
-                return;
-            }
         }
     }
 }
