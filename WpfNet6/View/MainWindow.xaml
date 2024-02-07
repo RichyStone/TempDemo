@@ -41,8 +41,8 @@
             <TextBlock Text="{Binding Test, FallbackValue=FallBack}" />
             <TextBlock Text="{Binding Test, TargetNullValue=TargetNull}" />
             <TextBlock d:Text="DesginTime" Text="Test" />
-            <TextBlock Text="Test" />
-            <TextBlock Text="Test" />
+            <TextBox Text="{Binding ValidateTest}" />
+            <TextBox Text="{Binding ValidateTest}" />
             <cus:CustomTextBox IsHighLighted="True" />
         </UniformGrid>
 

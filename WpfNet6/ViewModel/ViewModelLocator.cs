@@ -16,8 +16,8 @@ namespace WpfNet6.ViewModel
             _serviceProvider = _serviceCollection.BuildServiceProvider();
         }
 
-        public MainViewModel MainViewModel => _serviceProvider.GetService<MainViewModel>();
+        public MainViewModel? MainViewModel => _serviceProvider?.GetService<MainViewModel>();
 
-        public LoginViewModel LoginViewModel => _serviceProvider.GetService<LoginViewModel>();
+        public LoginViewModel? LoginViewModel => _serviceProvider?.GetService<LoginViewModel>();
     }
 }

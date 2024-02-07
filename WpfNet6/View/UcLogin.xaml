@@ -9,9 +9,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:validation="http://CommonUILib/UIResource/Validation"
     xmlns:vm="clr-namespace:WpfNet6.ViewModel"
+    DataContext="{Binding Source={StaticResource Locator}, Path=LoginViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    DataContext="{Binding Source={StaticResource Locator}, Path=LoginViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -37,6 +37,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25" />
                     <RowDefinition Height="25" />
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
@@ -163,6 +164,12 @@
                     Margin="20"
                     Foreground="Red"
                     Text="{Binding Errors, Mode=OneWay}" />
+
+                <TextBox
+                    Grid.Row="6"
+                    Margin="20"
+                    Foreground="Red"
+                    Text="{Binding ValidateTest, NotifyOnValidationError=True}" />
             </Grid>
         </Border>
     </Grid>

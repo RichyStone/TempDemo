@@ -103,7 +103,7 @@ namespace WpfNet6.ViewModel
 
             var res = reply.Response;
 
-            WordHelper.TestMethod($"{Environment.CurrentDirectory}", "Test.docx");
+            //WordHelper.TestMethod($"{Environment.CurrentDirectory}", "Test.docx");
         }
 
         private bool CanButtonClick => Enable;
@@ -166,5 +166,22 @@ namespace WpfNet6.ViewModel
         ////}
 
         #endregion IDataErrorInfo
+
+        private int validateTest;
+
+        [CustomValidation(typeof(LoginViewModel), nameof(ValiadteTestMethod))]
+        public int ValidateTest
+        {
+            get => validateTest;
+            set => SetProperty(ref validateTest, value, true);
+        }
+
+        public static ValidationResult? ValiadteTestMethod(int val)
+        {
+            if (val > 0 && val < 100)
+                return ValidationResult.Success;
+            else
+                return new ValidationResult("Invalid Value");
+        }
     }
 }
