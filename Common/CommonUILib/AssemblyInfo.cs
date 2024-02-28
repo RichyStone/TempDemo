@@ -16,6 +16,8 @@ using System.Windows.Markup;
 [assembly: XmlnsPrefix("http://CommonUILib/UIResource/AttachedProperty", "AP")]
 [assembly: XmlnsDefinition("http://CommonUILib/UIResource/CustomBehavior", "Common.CommonUILib.CustomBehavior")]
 [assembly: XmlnsPrefix("http://CommonUILib/UIResource/CustomBehavior", "CustomBehavior")]
+[assembly: XmlnsDefinition("http://CommonUILib/UIResource/EnumBindingExtension", "Common.CommonUILib.EnumBindingExtension")]
+[assembly: XmlnsPrefix("http://CommonUILib/UIResource/EnumBindingExtension", "EnumBindingExtension")]
 [assembly: XmlnsDefinition("http://CommonUILib/UIResource/BindingProxy", "Common.CommonUILib.BindingProxy")]
 [assembly: XmlnsPrefix("http://CommonUILib/UIResource/BindingProxy", "BindingProxy")]
 [assembly: XmlnsDefinition("http://CommonUILib/UIResource/UserControl", "Common.CommonUILib.UserControl")]
